@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	codegen "github.com/tniah/authkit/mocks/rfc6749/code_generator"
+	codegen "github.com/alkeyio/authkit/mocks/rfc6749/code_generator"
 )
 
 func TestNewOptions(t *testing.T) {

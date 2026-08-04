@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestNewTokenRequestFromHttp(t *testing.T) {
@@ -31,7 +31,7 @@ func TestNewTokenRequestFromHttp(t *testing.T) {
 func TestTokenRequest_CheckGrantType(t *testing.T) {
 	req := &TokenRequest{}
 	err := req.CheckGrantType()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	req.GrantType = types.GrantTypeAuthorizationCode
@@ -43,7 +43,7 @@ func TestTokenRequest_CheckCode(t *testing.T) {
 
 	// required by default
 	err := req.CheckCode()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	// optional when false is passed
@@ -56,7 +56,7 @@ func TestTokenRequest_CheckCode(t *testing.T) {
 func TestTokenRequest_CheckUsername(t *testing.T) {
 	req := &TokenRequest{}
 	err := req.CheckUsername()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	req.Username = "alice"
@@ -66,7 +66,7 @@ func TestTokenRequest_CheckUsername(t *testing.T) {
 func TestTokenRequest_CheckPassword(t *testing.T) {
 	req := &TokenRequest{}
 	err := req.CheckPassword()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	req.Password = "secret"

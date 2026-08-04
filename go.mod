@@ -1,4 +1,4 @@
-module github.com/tniah/authkit
+module github.com/alkeyio/authkit
 
 go 1.23.6
 

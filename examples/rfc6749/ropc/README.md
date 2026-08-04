@@ -2,7 +2,7 @@
 
 An interactive playground demonstrating the OAuth 2.0 Resource Owner Password Credentials grant
 ([RFC 6749 §4.3](https://www.rfc-editor.org/rfc/rfc6749#section-4.3)) built with
-[authkit](https://github.com/tniah/authkit).
+[authkit](https://github.com/alkeyio/authkit).
 
 > **Note:** ROPC is a legacy grant. For new integrations, prefer Authorization Code + PKCE.
 > Use ROPC only when migrating existing systems or when no redirect-based flow is possible.

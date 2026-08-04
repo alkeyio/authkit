@@ -6,9 +6,9 @@ import (
 	"sort"
 	"strings"
 
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
 )
 
 // Manager dispatches client authentication to the appropriate Handler based on

@@ -8,10 +8,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/integrations/sql"
-	rfc6749 "github.com/tniah/authkit/mocks/rfc6749/client_authentication"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/integrations/sql"
+	rfc6749 "github.com/alkeyio/authkit/mocks/rfc6749/client_authentication"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestManager_New(t *testing.T) {

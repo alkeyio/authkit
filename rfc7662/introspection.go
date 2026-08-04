@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/utils"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // TokenIntrospectionFlow implements RFC 7662 token introspection. It is

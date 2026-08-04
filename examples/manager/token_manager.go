@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tniah/authkit/integrations/sql"
-	authkitmodels "github.com/tniah/authkit/models"
-	authkitrequests "github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/rfc6750"
-	authkittypes "github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/integrations/sql"
+	authkitmodels "github.com/alkeyio/authkit/models"
+	authkitrequests "github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/rfc6750"
+	authkittypes "github.com/alkeyio/authkit/types"
 )
 
 // TokenManager is an in-memory OAuth2 token store for example purposes.

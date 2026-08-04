@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/integrations/sql"
-	"github.com/tniah/authkit/mocks/rfc7662"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/integrations/sql"
+	"github.com/alkeyio/authkit/mocks/rfc7662"
 )
 
 func TestTokenIntrospectionFlow_EndpointResponse(t *testing.T) {

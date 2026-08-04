@@ -3,9 +3,9 @@ package clientauth
 import (
 	"net/http"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
-	"github.com/tniah/authkit/utils"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // NoneAuthHandler implements the "none" authentication method for public clients

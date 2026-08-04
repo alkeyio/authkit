@@ -2,7 +2,7 @@
 
 An interactive playground demonstrating Proof Key for Code Exchange
 ([RFC 7636](https://www.rfc-editor.org/rfc/rfc7636)) built with
-[authkit](https://github.com/tniah/authkit).
+[authkit](https://github.com/alkeyio/authkit).
 
 The example extends the Authorization Code grant (RFC 6749 §4.1) with PKCE:
 the client generates a `code_verifier`, derives a `code_challenge` from it, and

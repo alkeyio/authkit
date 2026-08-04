@@ -1,8 +1,8 @@
 package rfc6750
 
 import (
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
 )
 
 // TokenTypeBearer is the OAuth2 token type string for Bearer tokens (RFC 6750).

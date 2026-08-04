@@ -8,10 +8,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/tniah/authkit/integrations/sql"
-	codegen "github.com/tniah/authkit/mocks/rfc6749/code_generator"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/integrations/sql"
+	codegen "github.com/alkeyio/authkit/mocks/rfc6749/code_generator"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestGenerator_New(t *testing.T) {

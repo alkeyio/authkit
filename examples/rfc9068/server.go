@@ -11,16 +11,16 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/tniah/authkit"
-	"github.com/tniah/authkit/examples/assets"
-	"github.com/tniah/authkit/examples/config"
-	"github.com/tniah/authkit/examples/manager"
-	"github.com/tniah/authkit/examples/middleware"
-	integsql "github.com/tniah/authkit/integrations/sql"
-	"github.com/tniah/authkit/rfc6749/ropc"
-	"github.com/tniah/authkit/rfc6750"
-	"github.com/tniah/authkit/rfc9068"
-	authkittypes "github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit"
+	"github.com/alkeyio/authkit/examples/assets"
+	"github.com/alkeyio/authkit/examples/config"
+	"github.com/alkeyio/authkit/examples/manager"
+	"github.com/alkeyio/authkit/examples/middleware"
+	integsql "github.com/alkeyio/authkit/integrations/sql"
+	"github.com/alkeyio/authkit/rfc6749/ropc"
+	"github.com/alkeyio/authkit/rfc6750"
+	"github.com/alkeyio/authkit/rfc9068"
+	authkittypes "github.com/alkeyio/authkit/types"
 )
 
 //go:embed index.html static/app.js keys/private.pem keys/public.pem
@@ -56,7 +56,7 @@ func SetupServer(cfg *config.Config, lg *slog.Logger) (http.Handler, error) {
 	// issuer identifies this authorization server in the JWT "iss" claim.
 	// audience identifies the resource server(s) that will accept the token.
 	issuer := fmt.Sprintf("http://%s:%s", publicHost(cfg.Address), cfg.Port)
-	audience := "https://github.com/tniah/authkit"
+	audience := "https://github.com/alkeyio/authkit"
 
 	// Load the RSA key pair from the embedded files under keys/.
 	// private.pem signs the JWT; public.pem is exposed to the playground UI

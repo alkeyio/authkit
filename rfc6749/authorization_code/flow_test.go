@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/tniah/authkit/integrations/sql"
-	authcodemock "github.com/tniah/authkit/mocks/rfc6749/authorization_code"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/integrations/sql"
+	authcodemock "github.com/alkeyio/authkit/mocks/rfc6749/authorization_code"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 func newAuthReq(method string) *requests.AuthorizationRequest {

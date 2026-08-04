@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tniah/authkit/mocks/rfc6749/ropc"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/mocks/rfc6749/ropc"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestNewConfig(t *testing.T) {

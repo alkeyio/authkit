@@ -3,9 +3,9 @@ package codegen
 import (
 	"time"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 // ExpiresInGenerator returns the authorization code lifetime for the given

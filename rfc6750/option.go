@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tniah/authkit/utils"
+	"github.com/alkeyio/authkit/utils"
 )
 
 var (

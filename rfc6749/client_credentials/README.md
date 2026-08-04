@@ -30,7 +30,7 @@ Package `clientcredentials` implements the [RFC 6749 §4.4 Client Credentials Gr
 ## Setup
 
 ```go
-import "github.com/tniah/authkit/rfc6749/client_credentials"
+import "github.com/alkeyio/authkit/rfc6749/client_credentials"
 
 cfg := clientcredentials.NewConfig().
     SetClientManager(clientMgr).

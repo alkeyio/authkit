@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/types"
 )
 
 // AuthorizationCode represents an OAuth 2.0 authorization code issued at the

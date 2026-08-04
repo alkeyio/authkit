@@ -66,8 +66,8 @@ import (
     "time"
 
     "github.com/golang-jwt/jwt/v5"
-    "github.com/tniah/authkit/rfc6750"
-    "github.com/tniah/authkit/rfc9068"
+    "github.com/alkeyio/authkit/rfc6750"
+    "github.com/alkeyio/authkit/rfc9068"
 )
 
 generator, err := rfc9068.MustJWTAccessTokenGenerator(

@@ -1,6 +1,6 @@
 package sql
 
-import "github.com/tniah/authkit/models"
+import "github.com/alkeyio/authkit/models"
 
 // Compile-time check that *User implements models.User.
 var _ models.User = (*User)(nil)

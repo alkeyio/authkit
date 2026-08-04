@@ -44,7 +44,7 @@ This is the recommended grant type for most applications. The client never handl
 ## Setup
 
 ```go
-import authorizationcode "github.com/tniah/authkit/rfc6749/authorization_code"
+import authorizationcode "github.com/alkeyio/authkit/rfc6749/authorization_code"
 
 cfg := authorizationcode.NewConfig().
     SetClientManager(clientMgr).

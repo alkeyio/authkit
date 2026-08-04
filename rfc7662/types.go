@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
 )
 
 // ClientManager authenticates the client calling the introspection endpoint

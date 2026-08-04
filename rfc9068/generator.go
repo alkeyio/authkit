@@ -8,10 +8,10 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/utils"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // protectedClaims is the set of standard RFC 9068 claim names that

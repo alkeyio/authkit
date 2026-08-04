@@ -3,8 +3,8 @@ package sql
 import (
 	"time"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
 )
 
 // Compile-time check that *AuthorizationCode implements models.ExtendableAuthorizationCode.

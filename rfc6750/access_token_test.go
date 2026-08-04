@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/tniah/authkit/integrations/sql"
-	mockrfc6750 "github.com/tniah/authkit/mocks/rfc6750"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/integrations/sql"
+	mockrfc6750 "github.com/alkeyio/authkit/mocks/rfc6750"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 func newAccessTokenReq() *requests.TokenRequest {

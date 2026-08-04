@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/integrations/sql"
-	oidc "github.com/tniah/authkit/mocks/oidc/core/authorization_code"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/integrations/sql"
+	oidc "github.com/alkeyio/authkit/mocks/oidc/core/authorization_code"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 var (

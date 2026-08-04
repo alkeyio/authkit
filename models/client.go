@@ -1,6 +1,6 @@
 package models
 
-import "github.com/tniah/authkit/types"
+import "github.com/alkeyio/authkit/types"
 
 // Client represents an OAuth2 client application. Implement this interface
 // with your own data model (e.g. a database-backed struct) and pass instances

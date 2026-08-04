@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tniah/authkit/examples/config"
+	"github.com/alkeyio/authkit/examples/config"
 )
 
 func main() {

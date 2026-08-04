@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	mockrfc6750 "github.com/tniah/authkit/mocks/rfc6750"
+	mockrfc6750 "github.com/alkeyio/authkit/mocks/rfc6750"
 )
 
 func TestNewBearerTokenGeneratorOptions(t *testing.T) {

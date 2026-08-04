@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	autherrors "github.com/tniah/authkit/errors"
+	autherrors "github.com/alkeyio/authkit/errors"
 )
 
 // DefaultExpiresIn is the JWT access token lifetime used when no

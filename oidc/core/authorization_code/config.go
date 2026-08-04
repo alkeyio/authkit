@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/utils"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // DefaultExpiresIn is the default ID Token lifetime (60 minutes).

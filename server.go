@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/utils"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // Server is the central OAuth2 coordinator. It dispatches incoming HTTP

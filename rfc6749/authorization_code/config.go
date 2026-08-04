@@ -4,8 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/tniah/authkit/types"
-	"github.com/tniah/authkit/utils"
+	"github.com/alkeyio/authkit/types"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // Sentinel errors returned by ValidateConfig when a required dependency is missing.

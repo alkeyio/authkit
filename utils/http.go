@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/types"
 )
 
 // ContentType parses the Content-Type header from r and returns it as a

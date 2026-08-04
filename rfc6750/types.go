@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
 )
 
 // ExpiresInGenerator is a pluggable function for computing access/refresh token

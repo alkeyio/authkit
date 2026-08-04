@@ -39,7 +39,7 @@ Package `ropc` implements the [RFC 6749 §4.3 Resource Owner Password Credential
 ## Setup
 
 ```go
-import "github.com/tniah/authkit/rfc6749/ropc"
+import "github.com/alkeyio/authkit/rfc6749/ropc"
 
 cfg := ropc.NewConfig().
     SetClientManager(clientMgr).

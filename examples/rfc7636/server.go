@@ -9,14 +9,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/tniah/authkit"
-	"github.com/tniah/authkit/examples/assets"
-	"github.com/tniah/authkit/examples/config"
-	"github.com/tniah/authkit/examples/manager"
-	"github.com/tniah/authkit/examples/middleware"
-	integsql "github.com/tniah/authkit/integrations/sql"
-	authcodegrant "github.com/tniah/authkit/rfc6749/authorization_code"
-	"github.com/tniah/authkit/rfc7636"
+	"github.com/alkeyio/authkit"
+	"github.com/alkeyio/authkit/examples/assets"
+	"github.com/alkeyio/authkit/examples/config"
+	"github.com/alkeyio/authkit/examples/manager"
+	"github.com/alkeyio/authkit/examples/middleware"
+	integsql "github.com/alkeyio/authkit/integrations/sql"
+	authcodegrant "github.com/alkeyio/authkit/rfc6749/authorization_code"
+	"github.com/alkeyio/authkit/rfc7636"
 )
 
 //go:embed index.html static/app.js

@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
 )
 
 // ClientStore is the data access layer for client lookup. Implement this

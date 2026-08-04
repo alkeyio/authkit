@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/rfc6749"
-	"github.com/tniah/authkit/types"
-	"github.com/tniah/authkit/utils"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/rfc6749"
+	"github.com/alkeyio/authkit/types"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // EndpointToken is the endpoint name passed to ClientManager.Authenticate so

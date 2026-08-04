@@ -9,11 +9,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/integrations/sql"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/integrations/sql"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestJWTAccessTokenGenerator(t *testing.T) {

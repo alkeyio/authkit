@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/tniah/authkit/integrations/sql"
-	rfc6749 "github.com/tniah/authkit/mocks/rfc6749/client_authentication"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/integrations/sql"
+	rfc6749 "github.com/alkeyio/authkit/mocks/rfc6749/client_authentication"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestNewBasicAuthHandler(t *testing.T) {

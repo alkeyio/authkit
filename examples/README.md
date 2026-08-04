@@ -1,7 +1,7 @@
 # Examples
 
 Runnable examples demonstrating OAuth 2.0 and related specifications built with
-[authkit](https://github.com/tniah/authkit).
+[authkit](https://github.com/alkeyio/authkit).
 
 ## Available examples
 

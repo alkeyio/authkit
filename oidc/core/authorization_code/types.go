@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
 )
 
 // IssuerGenerator is a function that returns the issuer (iss) claim value for

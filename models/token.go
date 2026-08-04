@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/types"
 )
 
 // Token represents an issued OAuth 2.0 token. Implement this interface with

@@ -5,9 +5,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tniah/authkit/integrations/sql"
-	authkitmodels "github.com/tniah/authkit/models"
-	authkitcodegen "github.com/tniah/authkit/rfc6749/code_generator"
+	"github.com/alkeyio/authkit/integrations/sql"
+	authkitmodels "github.com/alkeyio/authkit/models"
+	authkitcodegen "github.com/alkeyio/authkit/rfc6749/code_generator"
 )
 
 // AuthorizationCodeManager is an in-memory OAuth2 authorization code store for example purposes.

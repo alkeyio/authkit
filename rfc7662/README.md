@@ -40,7 +40,7 @@ Token Introspection allows a resource server or client to query the authorizatio
 ## Setup
 
 ```go
-import "github.com/tniah/authkit/rfc7662"
+import "github.com/alkeyio/authkit/rfc7662"
 
 cfg := rfc7662.NewConfig().
     SetClientManager(clientMgr).

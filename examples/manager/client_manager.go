@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/tniah/authkit/integrations/sql"
-	authkitmodels "github.com/tniah/authkit/models"
-	clientauth "github.com/tniah/authkit/rfc6749/client_authentication"
-	authkittypes "github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/integrations/sql"
+	authkitmodels "github.com/alkeyio/authkit/models"
+	clientauth "github.com/alkeyio/authkit/rfc6749/client_authentication"
+	authkittypes "github.com/alkeyio/authkit/types"
 )
 
 // ClientManager is an in-memory OAuth2 client store for example purposes.

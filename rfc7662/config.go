@@ -3,8 +3,8 @@ package rfc7662
 import (
 	"errors"
 
-	"github.com/tniah/authkit/types"
-	"github.com/tniah/authkit/utils"
+	"github.com/alkeyio/authkit/types"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // EndpointNameTokenIntrospection is the default endpoint name used to register

@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/utils"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/utils"
 )
 
 const DefaultAccessTokenExpiresIn = time.Minute * 60

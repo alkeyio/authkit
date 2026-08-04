@@ -2,7 +2,7 @@
 
 An interactive playground demonstrating OAuth 2.0 Token Introspection
 ([RFC 7662](https://www.rfc-editor.org/rfc/rfc7662)) built with
-[authkit](https://github.com/tniah/authkit).
+[authkit](https://github.com/alkeyio/authkit).
 
 The example uses the Resource Owner Password Credentials grant (RFC 6749 §4.3) to issue a token,
 then introspects it via a dedicated endpoint. Both the grant and the introspection endpoint share

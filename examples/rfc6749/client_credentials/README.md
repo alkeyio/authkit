@@ -2,7 +2,7 @@
 
 An interactive playground demonstrating the OAuth 2.0 Client Credentials grant
 ([RFC 6749 §4.4](https://www.rfc-editor.org/rfc/rfc6749#section-4.4)) built with
-[authkit](https://github.com/tniah/authkit).
+[authkit](https://github.com/alkeyio/authkit).
 
 ![Client Credentials Playground](docs/screenshot.png)
 

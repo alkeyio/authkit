@@ -1,11 +1,11 @@
 package rfc7636
 
 import (
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
-	"github.com/tniah/authkit/utils"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
+	"github.com/alkeyio/authkit/utils"
 )
 
 // ProofKeyForCodeExchangeFlow implements PKCE (RFC 7636) as an extension for

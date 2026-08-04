@@ -3,8 +3,8 @@ package authkit
 import (
 	"net/http"
 
-	"github.com/tniah/authkit/requests"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/requests"
+	"github.com/alkeyio/authkit/types"
 )
 
 // AuthorizationGrant handles the /authorize endpoint for a specific response_type.

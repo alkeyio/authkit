@@ -2,7 +2,7 @@
 
 An interactive playground demonstrating JWT Access Tokens
 ([RFC 9068](https://www.rfc-editor.org/rfc/rfc9068)) built with
-[authkit](https://github.com/tniah/authkit).
+[authkit](https://github.com/alkeyio/authkit).
 
 The example uses the Resource Owner Password Credentials grant (RFC 6749 §4.3) as the token
 issuance mechanism, with a `JWTAccessTokenGenerator` plugged in via `BearerTokenGeneratorOptions`
@@ -62,7 +62,7 @@ SERVER_PORT=8080 go run ./examples/rfc9068
 | Key ID      | `demo-key-1`                          |
 | Expires in  | `30 minutes`                          |
 | Issuer      | `http://<SERVER_ADDRESS>:<SERVER_PORT>` |
-| Audience    | `https://github.com/tniah/authkit`    |
+| Audience    | `https://github.com/alkeyio/authkit`    |
 
 The RSA 1024-bit key pair is stored in `keys/private.pem` and `keys/public.pem` and embedded into
 the binary at compile time via `//go:embed`.

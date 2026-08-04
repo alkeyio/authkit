@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	authkitmodels "github.com/tniah/authkit/models"
-	authkitrequests "github.com/tniah/authkit/requests"
+	authkitmodels "github.com/alkeyio/authkit/models"
+	authkitrequests "github.com/alkeyio/authkit/requests"
 )
 
 // User is an in-memory user model with standard OIDC profile claims

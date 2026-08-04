@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
 )
 
 // TokenRequest holds the parsed parameters of an OAuth 2.0 token endpoint

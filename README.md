@@ -1,7 +1,7 @@
 # AuthKit
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/tniah/authkit.svg)](https://pkg.go.dev/github.com/tniah/authkit)
-[![Go Report Card](https://goreportcard.com/badge/github.com/tniah/authkit)](https://goreportcard.com/report/github.com/tniah/authkit)
+[![Go Reference](https://pkg.go.dev/badge/github.com/alkeyio/authkit.svg)](https://pkg.go.dev/github.com/alkeyio/authkit)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alkeyio/authkit)](https://goreportcard.com/report/github.com/alkeyio/authkit)
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE)
 [![Go Version](https://img.shields.io/badge/go-1.23%2B-00ADD8)](go.mod)
 
@@ -33,7 +33,7 @@ Most Go teams building an authorization server end up in one of two places: hand
 ## Installation
 
 ```bash
-go get github.com/tniah/authkit
+go get github.com/alkeyio/authkit
 ```
 
 ## Supported Specifications
@@ -120,10 +120,10 @@ PKCE (`rfc7636`) and OIDC (`oidc/core/authorization_code`) are implemented as ex
 
 ```go
 import (
-    "github.com/tniah/authkit"
-    authorizationcode "github.com/tniah/authkit/rfc6749/authorization_code"
-    "github.com/tniah/authkit/rfc7636"
-    oidcflow "github.com/tniah/authkit/oidc/core/authorization_code"
+    "github.com/alkeyio/authkit"
+    authorizationcode "github.com/alkeyio/authkit/rfc6749/authorization_code"
+    "github.com/alkeyio/authkit/rfc7636"
+    oidcflow "github.com/alkeyio/authkit/oidc/core/authorization_code"
 )
 
 // PKCE — plain and S256 both accepted by default (RFC 7636).
@@ -157,8 +157,8 @@ srv.RegisterGrant(flow)
 
 ```go
 import (
-    "github.com/tniah/authkit"
-    "github.com/tniah/authkit/rfc6749/ropc"
+    "github.com/alkeyio/authkit"
+    "github.com/alkeyio/authkit/rfc6749/ropc"
 )
 
 flow, _ := ropc.Must(
@@ -176,8 +176,8 @@ srv.RegisterGrant(flow)
 
 ```go
 import (
-    "github.com/tniah/authkit"
-    clientcredentials "github.com/tniah/authkit/rfc6749/client_credentials"
+    "github.com/alkeyio/authkit"
+    clientcredentials "github.com/alkeyio/authkit/rfc6749/client_credentials"
 )
 
 flow, _ := clientcredentials.Must(
@@ -193,7 +193,7 @@ srv.RegisterGrant(flow)
 ### JWT Access Tokens (RFC 9068)
 
 ```go
-import "github.com/tniah/authkit/rfc9068"
+import "github.com/alkeyio/authkit/rfc9068"
 
 jwtGen, _ := rfc9068.MustJWTAccessTokenGenerator(
     rfc9068.NewGeneratorConfig().
@@ -206,7 +206,7 @@ jwtGen, _ := rfc9068.MustJWTAccessTokenGenerator(
 ### Token Introspection (RFC 7662)
 
 ```go
-import "github.com/tniah/authkit/rfc7662"
+import "github.com/alkeyio/authkit/rfc7662"
 
 introspection, _ := rfc7662.MustTokenIntrospectionFlow(
     rfc7662.NewConfig().

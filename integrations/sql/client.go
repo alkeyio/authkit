@@ -7,8 +7,8 @@ import (
 	"crypto/subtle"
 	"time"
 
-	"github.com/tniah/authkit/models"
-	"github.com/tniah/authkit/types"
+	"github.com/alkeyio/authkit/models"
+	"github.com/alkeyio/authkit/types"
 )
 
 // Compile-time check that *Client implements models.Client.

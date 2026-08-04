@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/types"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/types"
 )
 
 func TestNewAuthorizationRequestFromHttp(t *testing.T) {
@@ -34,7 +34,7 @@ func TestNewAuthorizationRequestFromHttp(t *testing.T) {
 func TestAuthorizationRequest_CheckResponseType(t *testing.T) {
 	req := &AuthorizationRequest{}
 	err := req.CheckResponseType()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	req.ResponseType = types.ResponseTypeCode
@@ -48,7 +48,7 @@ func TestAuthorizationRequest_CheckResponseType(t *testing.T) {
 func TestAuthorizationRequest_CheckClientID(t *testing.T) {
 	req := &AuthorizationRequest{}
 	err := req.CheckClientID()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	assert.NoError(t, req.CheckClientID(false))
@@ -62,7 +62,7 @@ func TestAuthorizationRequest_CheckNonce(t *testing.T) {
 
 	// required by default
 	err := req.CheckNonce()
-	authErr := autherrors.ToAuthLibError(err)
+	authErr := autherrors.ToAuthKitError(err)
 	assert.Equal(t, autherrors.ErrInvalidRequest, authErr.Code)
 
 	// optional when false is passed

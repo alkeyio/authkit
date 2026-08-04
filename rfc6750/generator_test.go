@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/tniah/authkit/integrations/sql"
-	"github.com/tniah/authkit/mocks/rfc6750"
-	"github.com/tniah/authkit/requests"
+	"github.com/alkeyio/authkit/integrations/sql"
+	"github.com/alkeyio/authkit/mocks/rfc6750"
+	"github.com/alkeyio/authkit/requests"
 )
 
 func TestMustBearerTokenGenerator(t *testing.T) {

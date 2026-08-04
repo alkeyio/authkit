@@ -6,8 +6,8 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
-	autherrors "github.com/tniah/authkit/errors"
-	"github.com/tniah/authkit/mocks/rfc9068"
+	autherrors "github.com/alkeyio/authkit/errors"
+	"github.com/alkeyio/authkit/mocks/rfc9068"
 )
 
 func TestConfig(t *testing.T) {
