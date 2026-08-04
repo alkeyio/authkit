@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OAuth2 Playground - JWT Access Tokens</title>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    pre.http-raw { white-space: pre-wrap; word-break: break-all; }
+    .kv-block ::selection { background: rgba(45,212,191,0.35); color: inherit; }
+    .ts-hint { cursor: default; border-bottom: 1px dashed var(--text-faint); }
+    .kv-block { position: relative; }
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 5px;
+      background: var(--panel-hair, #1D2A42); border: 1px solid var(--border);
+      color: var(--text-dim); cursor: pointer; transition: all .15s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--teal); }
+    .copy-btn.copied { color: var(--teal); border-color: var(--teal); }
+    #ts-tooltip {
+      position: fixed; z-index: 9999; pointer-events: none;
+      background: var(--panel-raised); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--sans); font-size: 12px;
+      padding: 5px 9px; border-radius: 6px; white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      opacity: 0; transition: opacity .1s;
+    }
+    #ts-tooltip.show { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div class="brand-text">
+        <span class="app-name">AuthKit</span>
+        <span class="app-sub"><a href="https://github.com/tniah/authkit" target="_blank" rel="noopener noreferrer">github.com/tniah/authkit</a></span>
+      </div>
+    </div>
+  </div>
+  <h1 class="title">OAuth2 — JWT Access Tokens (RFC 9068)</h1>
+  <p class="subtitle">Step through the ROPC flow with JWT access tokens and inspect real HTTP requests and responses.</p>
+
+  <div class="layout" style="grid-template-columns:296px 1fr;">
+
+    <!-- LEFT: client config + user credentials + JWT config -->
+    <div class="panel">
+      <div class="panel-title">Client Configuration</div>
+
+      <div class="field">
+        <label>Client Name</label>
+        <input type="text" id="clientName" readonly />
+      </div>
+      <div class="field">
+        <label>Client ID</label>
+        <input type="text" id="clientId" />
+      </div>
+      <div class="field">
+        <label>Client Secret</label>
+        <input type="text" id="clientSecret" />
+      </div>
+      <div class="field">
+        <label>Token Endpoint Auth Method</label>
+        <select id="authMethod">
+          <option value="none">none</option>
+          <option value="client_secret_basic">client_secret_basic</option>
+          <option value="client_secret_post">client_secret_post</option>
+        </select>
+        <div class="hint" id="authMethodHint"></div>
+      </div>
+      <div class="field">
+        <label>Scopes</label>
+        <div class="scope-list" id="scopeList"></div>
+      </div>
+
+      <div class="panel-title" style="margin-top:20px;">User Credentials</div>
+
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="username" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="text" id="password" />
+      </div>
+
+      <div class="panel-title" style="margin-top:20px;">JWT Configuration</div>
+
+      <div class="field">
+        <label>Issuer (iss)</label>
+        <input type="text" id="jwtIssuer" readonly />
+      </div>
+      <div class="field">
+        <label>Audience (aud)</label>
+        <input type="text" id="jwtAudience" readonly />
+      </div>
+      <div class="field">
+        <label>Algorithm</label>
+        <input type="text" id="jwtAlgorithm" readonly />
+      </div>
+      <div class="field">
+        <label>Public Key</label>
+        <textarea id="jwtPublicKey" readonly rows="7" style="width:100%;background:var(--panel-raised);border:1px solid var(--border);border-radius:7px;padding:9px 10px;color:var(--text);font-family:var(--mono);font-size:11px;outline:none;resize:none;line-height:1.6;"></textarea>
+      </div>
+    </div>
+
+    <!-- CENTER: timeline -->
+    <div class="panel" style="padding:20px;">
+      <div class="timeline-head">
+        <h2>JWT Access Tokens (RFC 9068)</h2>
+        <div class="run-controls">
+          <button class="btn" id="resetBtn">↺ Reset</button>
+          <button class="btn primary" id="nextBtn">Step →</button>
+        </div>
+      </div>
+      <div class="rail" id="rail">
+        <div class="rail-line"></div>
+        <div class="rail-line-fill" id="railFill"></div>
+        <div id="steps"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="ts-tooltip"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

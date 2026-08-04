@@ -1,0 +1,72 @@
+with-expecter: true
+issue-845-fix: True
+resolve-type-alias: False
+filename: "{{ .InterfaceName | snakecase }}.go"
+dir: "mocks/{{ .InterfaceDirRelative }}"
+packages:
+  github.com/tniah/authkit/rfc6749/client_authentication:
+    config:
+      outpkg: rfc6749
+    interfaces:
+      ClientStore:
+      Handler:
+  github.com/tniah/authkit/rfc6749/code_generator:
+    interfaces:
+      ExpiresInGenerator:
+      RandStringGenerator:
+      ExtraDataGenerator:
+  github.com/tniah/authkit/rfc6749/authorization_code:
+    interfaces:
+      ClientManager:
+      UserManager:
+      AuthCodeManager:
+      TokenManager:
+      AuthorizationRequestValidator:
+      ConsentRequestValidator:
+      AuthCodeProcessor:
+      TokenRequestValidator:
+      TokenProcessor:
+  github.com/tniah/authkit/rfc6749/client_credentials:
+    interfaces:
+      ClientManager:
+      TokenManager:
+      TokenRequestValidator:
+      TokenProcessor:
+  github.com/tniah/authkit/rfc6749/ropc:
+    interfaces:
+      ClientManager:
+      UserManager:
+      TokenManager:
+      TokenRequestValidator:
+      TokenProcessor:
+  github.com/tniah/authkit/rfc6750:
+    config:
+      outpkg: rfc6750
+    interfaces:
+      TokenGenerator:
+      ExpiresInGenerator:
+      RandStringGenerator:
+  github.com/tniah/authkit/rfc7662:
+    config:
+      outpkg: rfc7662
+    interfaces:
+      ClientManager:
+      TokenManager:
+  github.com/tniah/authkit/rfc9068:
+    config:
+      outpkg: rfc9068
+    interfaces:
+      IssuerGenerator:
+      ExpiresInGenerator:
+      SigningKeyGenerator:
+      ExtraClaimGenerator:
+      JWTIDGenerator:
+  github.com/tniah/authkit/oidc/core/authorization_code:
+    config:
+      outpkg: oidc
+    interfaces:
+      IssuerGenerator:
+      ExpiresInGenerator:
+      SigningKeyGenerator:
+      ExtraClaimGenerator:
+      ExistNonce:

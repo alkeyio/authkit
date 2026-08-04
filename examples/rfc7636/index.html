@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OAuth2 Playground - PKCE</title>
+  <link rel="stylesheet" href="/static/fonts.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .kv-block { position: relative; }
+    .kv-block ::selection { background: rgba(45,212,191,0.35); color: inherit; }
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 5px;
+      background: var(--panel-hair, #1D2A42); border: 1px solid var(--border);
+      color: var(--text-dim); cursor: pointer; transition: all .15s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: var(--teal); }
+    .copy-btn.copied { color: var(--teal); border-color: var(--teal); }
+    .ts-hint { cursor: default; border-bottom: 1px dashed var(--text-faint); }
+    #ts-tooltip {
+      position: fixed; z-index: 9999; pointer-events: none;
+      background: var(--panel-raised); border: 1px solid var(--border);
+      color: var(--text); font-family: var(--sans); font-size: 12px;
+      padding: 5px 9px; border-radius: 6px; white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      opacity: 0; transition: opacity .1s;
+    }
+    #ts-tooltip.show { opacity: 1; }
+    pre.http-raw { white-space: pre-wrap; word-break: break-all; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <div class="brand-text">
+        <span class="app-name">AuthKit</span>
+        <span class="app-sub"><a href="https://github.com/tniah/authkit" target="_blank" rel="noopener noreferrer">github.com/tniah/authkit</a></span>
+      </div>
+    </div>
+  </div>
+  <h1 class="title">OAuth2 — PKCE (RFC 7636)</h1>
+  <p class="subtitle">Authorization Code + Proof Key for Code Exchange — inspect real HTTP requests and responses at each step.</p>
+
+  <div class="layout" style="grid-template-columns:296px 1fr;">
+
+    <!-- LEFT: client config + PKCE params -->
+    <div class="panel">
+      <div class="panel-title">Client Configuration</div>
+
+      <div class="field">
+        <label>Client Name</label>
+        <input type="text" id="clientName" readonly />
+      </div>
+      <div class="field">
+        <label>Client ID</label>
+        <input type="text" id="clientId" readonly />
+      </div>
+      <div class="field">
+        <label>Redirect URI</label>
+        <input type="text" id="redirectUri" readonly />
+      </div>
+      <div class="field">
+        <label>Token Endpoint Auth Method</label>
+        <input type="text" id="authMethod" readonly />
+        <div class="hint" id="authMethodHint"></div>
+      </div>
+      <div class="field">
+        <label>Scopes</label>
+        <div class="scope-list" id="scopeList"></div>
+      </div>
+
+      <div class="panel-title" style="margin-top:20px;">PKCE</div>
+
+      <div class="field">
+        <label>Challenge Method</label>
+        <select id="challengeMethod">
+          <option value="S256">S256</option>
+          <option value="plain">plain</option>
+        </select>
+        <div class="hint" id="challengeMethodHint"></div>
+      </div>
+      <div class="field">
+        <label>code_verifier</label>
+        <input type="text" id="codeVerifier" readonly />
+      </div>
+      <div class="field">
+        <label>code_challenge</label>
+        <input type="text" id="codeChallenge" readonly />
+      </div>
+
+    </div>
+
+    <!-- CENTER: timeline -->
+    <div class="panel" style="padding:20px;">
+      <div class="timeline-head">
+        <h2>Authorization Code + PKCE (RFC 7636)</h2>
+        <div class="run-controls">
+          <button class="btn" id="resetBtn">↺ Reset</button>
+          <button class="btn primary" id="nextBtn">Step →</button>
+        </div>
+      </div>
+      <div class="rail" id="rail">
+        <div class="rail-line"></div>
+        <div class="rail-line-fill" id="railFill"></div>
+        <div id="steps"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="ts-tooltip"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
