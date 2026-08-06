@@ -36,12 +36,12 @@ func TestTokenIntrospectionFlow_EndpointResponse(t *testing.T) {
 
 	mockTokenMgr := rfc7662.NewMockTokenManager(t)
 	mockTokenMgr.On("QueryByToken", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("types.TokenTypeHint")).Return(mockToken, nil).Once()
-	mockTokenMgr.On("Inspect", mock.Anything, mock.Anything).Return(expected).Once()
+	mockTokenMgr.On("Inspect", mock.Anything, mock.Anything, mock.Anything).Return(expected).Once()
 	cfg.SetTokenManager(mockTokenMgr)
 
 	mockClientMgr := rfc7662.NewMockClientManager(t)
 	mockClientMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("*http.Request"), mock.AnythingOfType("map[types.ClientAuthMethod]bool"), mock.AnythingOfType("string")).Return(mockClient, nil).Once()
-	mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(true).Once()
+	mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(true).Once()
 	cfg.SetClientManager(mockClientMgr)
 
 	rw := httptest.NewRecorder()
@@ -96,7 +96,7 @@ func TestTokenIntrospectionFlow_authenticateToken(t *testing.T) {
 		r := NewRequestFromHTTP(hr)
 
 		mockTokenMgr.On("QueryByToken", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("types.TokenTypeHint")).Return(mockToken, nil).Once()
-		mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(true).Once()
+		mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(true).Once()
 
 		r.Client = mockClient
 		err := h.authenticateToken(r)
@@ -112,7 +112,7 @@ func TestTokenIntrospectionFlow_authenticateToken(t *testing.T) {
 		r := NewRequestFromHTTP(hr)
 
 		mockTokenMgr.On("QueryByToken", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("types.TokenTypeHint")).Return(mockToken, nil).Once()
-		mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(false).Once()
+		mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(false).Once()
 		r.Client = mockClient
 
 		err := h.authenticateToken(r)
@@ -190,9 +190,10 @@ func TestTokenIntrospectionFlow_introspectionPayload(t *testing.T) {
 			IssuedAt:             time.Now().UTC().Round(time.Second),
 			AccessTokenExpiresIn: time.Hour * 24,
 		}
-		mockTokenMgr.On("Inspect", mock.Anything, mock.Anything).Return(expected).Once()
+		mockTokenMgr.On("Inspect", mock.Anything, mock.Anything, mock.Anything).Return(expected).Once()
 
 		r := &Request{}
+		r.Request = httptest.NewRequest(http.MethodPost, "/", nil)
 		r.Tok = mockToken
 		r.Client = mockClient
 
@@ -204,6 +205,7 @@ func TestTokenIntrospectionFlow_introspectionPayload(t *testing.T) {
 
 	t.Run("error_when_token_is_invalid", func(t *testing.T) {
 		r := &Request{}
+		r.Request = httptest.NewRequest(http.MethodPost, "/", nil)
 		r.Client = mockClient
 
 		payload := h.introspectionPayload(r)

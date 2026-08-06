@@ -87,17 +87,17 @@ func (_c *MockClientManager_Authenticate_Call) RunAndReturn(run func(context.Con
 	return _c
 }
 
-// CheckPermission provides a mock function with given fields: client, token, r
-func (_m *MockClientManager) CheckPermission(client models.Client, token models.Token, r *http.Request) bool {
-	ret := _m.Called(client, token, r)
+// CheckPermission provides a mock function with given fields: ctx, client, token, r
+func (_m *MockClientManager) CheckPermission(ctx context.Context, client models.Client, token models.Token, r *http.Request) bool {
+	ret := _m.Called(ctx, client, token, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CheckPermission")
 	}
 
 	var r0 bool
-	if rf, ok := ret.Get(0).(func(models.Client, models.Token, *http.Request) bool); ok {
-		r0 = rf(client, token, r)
+	if rf, ok := ret.Get(0).(func(context.Context, models.Client, models.Token, *http.Request) bool); ok {
+		r0 = rf(ctx, client, token, r)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
@@ -111,16 +111,17 @@ type MockClientManager_CheckPermission_Call struct {
 }
 
 // CheckPermission is a helper method to define mock.On call
+//   - ctx context.Context
 //   - client models.Client
 //   - token models.Token
 //   - r *http.Request
-func (_e *MockClientManager_Expecter) CheckPermission(client interface{}, token interface{}, r interface{}) *MockClientManager_CheckPermission_Call {
-	return &MockClientManager_CheckPermission_Call{Call: _e.mock.On("CheckPermission", client, token, r)}
+func (_e *MockClientManager_Expecter) CheckPermission(ctx interface{}, client interface{}, token interface{}, r interface{}) *MockClientManager_CheckPermission_Call {
+	return &MockClientManager_CheckPermission_Call{Call: _e.mock.On("CheckPermission", ctx, client, token, r)}
 }
 
-func (_c *MockClientManager_CheckPermission_Call) Run(run func(client models.Client, token models.Token, r *http.Request)) *MockClientManager_CheckPermission_Call {
+func (_c *MockClientManager_CheckPermission_Call) Run(run func(ctx context.Context, client models.Client, token models.Token, r *http.Request)) *MockClientManager_CheckPermission_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(models.Client), args[1].(models.Token), args[2].(*http.Request))
+		run(args[0].(context.Context), args[1].(models.Client), args[2].(models.Token), args[3].(*http.Request))
 	})
 	return _c
 }
@@ -130,7 +131,7 @@ func (_c *MockClientManager_CheckPermission_Call) Return(_a0 bool) *MockClientMa
 	return _c
 }
 
-func (_c *MockClientManager_CheckPermission_Call) RunAndReturn(run func(models.Client, models.Token, *http.Request) bool) *MockClientManager_CheckPermission_Call {
+func (_c *MockClientManager_CheckPermission_Call) RunAndReturn(run func(context.Context, models.Client, models.Token, *http.Request) bool) *MockClientManager_CheckPermission_Call {
 	_c.Call.Return(run)
 	return _c
 }

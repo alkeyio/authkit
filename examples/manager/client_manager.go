@@ -65,6 +65,6 @@ func (m *ClientManager) Authenticate(ctx context.Context, r *http.Request, authM
 }
 
 // CheckPermission reports whether the client is permitted to introspect the given token.
-func (m *ClientManager) CheckPermission(client authkitmodels.Client, token authkitmodels.Token, r *http.Request) bool {
+func (m *ClientManager) CheckPermission(_ context.Context, client authkitmodels.Client, token authkitmodels.Token, r *http.Request) bool {
 	return true
 }

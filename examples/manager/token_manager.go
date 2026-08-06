@@ -115,7 +115,7 @@ func (m *TokenManager) QueryByToken(_ context.Context, token string, hint authki
 
 // Inspect returns the RFC 7662 §2.2 introspection claims for an active token.
 // The caller (introspection endpoint) merges these with {"active": true}; do not include it here.
-func (m *TokenManager) Inspect(_ authkitmodels.Client, token authkitmodels.Token) map[string]interface{} {
+func (m *TokenManager) Inspect(_ context.Context, _ authkitmodels.Client, token authkitmodels.Token) map[string]interface{} {
 	data := make(map[string]interface{})
 
 	if scopes := token.GetScopes(); len(scopes) > 0 {

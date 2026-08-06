@@ -77,7 +77,7 @@ func (f *TokenIntrospectionFlow) authenticateToken(r *Request) error {
 		return err
 	}
 
-	if allowed := f.clientManager.CheckPermission(r.Client, token, r.Request); !allowed {
+	if allowed := f.clientManager.CheckPermission(r.Request.Context(), r.Client, token, r.Request); !allowed {
 		return autherrors.AccessDeniedError().WithDescription("client does not have permission to inspect token")
 	}
 
@@ -118,7 +118,7 @@ func (f *TokenIntrospectionFlow) introspectionPayload(r *Request) map[string]int
 		return inactive
 	}
 
-	payload := f.tokenManager.Inspect(r.Client, r.Tok)
+	payload := f.tokenManager.Inspect(r.Request.Context(), r.Client, r.Tok)
 	if payload == nil {
 		payload = make(map[string]interface{})
 	}

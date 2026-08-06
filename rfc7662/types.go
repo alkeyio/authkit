@@ -18,7 +18,7 @@ type ClientManager interface {
 
 	// CheckPermission reports whether client is allowed to introspect token.
 	// Return false to respond with access_denied.
-	CheckPermission(client models.Client, token models.Token, r *http.Request) bool
+	CheckPermission(ctx context.Context, client models.Client, token models.Token, r *http.Request) bool
 }
 
 // TokenManager looks up tokens by value and builds the introspection payload.
@@ -31,5 +31,5 @@ type TokenManager interface {
 	// Inspect builds the RFC 7662 §2.2 claim set for an active token.
 	// The returned map is merged with {"active": true} before writing the
 	// response. Return nil to emit only {"active": true} with no extra claims.
-	Inspect(client models.Client, token models.Token) map[string]interface{}
+	Inspect(ctx context.Context, client models.Client, token models.Token) map[string]interface{}
 }

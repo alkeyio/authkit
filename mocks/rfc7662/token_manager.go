@@ -24,17 +24,17 @@ func (_m *MockTokenManager) EXPECT() *MockTokenManager_Expecter {
 	return &MockTokenManager_Expecter{mock: &_m.Mock}
 }
 
-// Inspect provides a mock function with given fields: client, token
-func (_m *MockTokenManager) Inspect(client models.Client, token models.Token) map[string]interface{} {
-	ret := _m.Called(client, token)
+// Inspect provides a mock function with given fields: ctx, client, token
+func (_m *MockTokenManager) Inspect(ctx context.Context, client models.Client, token models.Token) map[string]interface{} {
+	ret := _m.Called(ctx, client, token)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Inspect")
 	}
 
 	var r0 map[string]interface{}
-	if rf, ok := ret.Get(0).(func(models.Client, models.Token) map[string]interface{}); ok {
-		r0 = rf(client, token)
+	if rf, ok := ret.Get(0).(func(context.Context, models.Client, models.Token) map[string]interface{}); ok {
+		r0 = rf(ctx, client, token)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(map[string]interface{})
@@ -50,15 +50,16 @@ type MockTokenManager_Inspect_Call struct {
 }
 
 // Inspect is a helper method to define mock.On call
+//   - ctx context.Context
 //   - client models.Client
 //   - token models.Token
-func (_e *MockTokenManager_Expecter) Inspect(client interface{}, token interface{}) *MockTokenManager_Inspect_Call {
-	return &MockTokenManager_Inspect_Call{Call: _e.mock.On("Inspect", client, token)}
+func (_e *MockTokenManager_Expecter) Inspect(ctx interface{}, client interface{}, token interface{}) *MockTokenManager_Inspect_Call {
+	return &MockTokenManager_Inspect_Call{Call: _e.mock.On("Inspect", ctx, client, token)}
 }
 
-func (_c *MockTokenManager_Inspect_Call) Run(run func(client models.Client, token models.Token)) *MockTokenManager_Inspect_Call {
+func (_c *MockTokenManager_Inspect_Call) Run(run func(ctx context.Context, client models.Client, token models.Token)) *MockTokenManager_Inspect_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(models.Client), args[1].(models.Token))
+		run(args[0].(context.Context), args[1].(models.Client), args[2].(models.Token))
 	})
 	return _c
 }
@@ -68,7 +69,7 @@ func (_c *MockTokenManager_Inspect_Call) Return(_a0 map[string]interface{}) *Moc
 	return _c
 }
 
-func (_c *MockTokenManager_Inspect_Call) RunAndReturn(run func(models.Client, models.Token) map[string]interface{}) *MockTokenManager_Inspect_Call {
+func (_c *MockTokenManager_Inspect_Call) RunAndReturn(run func(context.Context, models.Client, models.Token) map[string]interface{}) *MockTokenManager_Inspect_Call {
 	_c.Call.Return(run)
 	return _c
 }
