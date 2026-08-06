@@ -49,5 +49,5 @@ type TokenRequestValidator interface {
 // before the response is written. Use it to add extra fields to the token
 // response (e.g. attaching a custom claim).
 type TokenProcessor interface {
-	ProcessToken(r *requests.TokenRequest, token models.Token, data map[string]interface{}) error
+	ProcessToken(r *requests.TokenRequest, token models.TokenReader, data map[string]interface{}) error
 }

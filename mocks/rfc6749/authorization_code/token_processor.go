@@ -25,7 +25,7 @@ func (_m *MockTokenProcessor) EXPECT() *MockTokenProcessor_Expecter {
 }
 
 // ProcessToken provides a mock function with given fields: ctx, r, token, data
-func (_m *MockTokenProcessor) ProcessToken(ctx context.Context, r *requests.TokenRequest, token models.Token, data map[string]interface{}) error {
+func (_m *MockTokenProcessor) ProcessToken(ctx context.Context, r *requests.TokenRequest, token models.TokenReader, data map[string]interface{}) error {
 	ret := _m.Called(ctx, r, token, data)
 
 	if len(ret) == 0 {
@@ -33,7 +33,7 @@ func (_m *MockTokenProcessor) ProcessToken(ctx context.Context, r *requests.Toke
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *requests.TokenRequest, models.Token, map[string]interface{}) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.TokenRequest, models.TokenReader, map[string]interface{}) error); ok {
 		r0 = rf(ctx, r, token, data)
 	} else {
 		r0 = ret.Error(0)
@@ -50,15 +50,15 @@ type MockTokenProcessor_ProcessToken_Call struct {
 // ProcessToken is a helper method to define mock.On call
 //   - ctx context.Context
 //   - r *requests.TokenRequest
-//   - token models.Token
+//   - token models.TokenReader
 //   - data map[string]interface{}
 func (_e *MockTokenProcessor_Expecter) ProcessToken(ctx interface{}, r interface{}, token interface{}, data interface{}) *MockTokenProcessor_ProcessToken_Call {
 	return &MockTokenProcessor_ProcessToken_Call{Call: _e.mock.On("ProcessToken", ctx, r, token, data)}
 }
 
-func (_c *MockTokenProcessor_ProcessToken_Call) Run(run func(ctx context.Context, r *requests.TokenRequest, token models.Token, data map[string]interface{})) *MockTokenProcessor_ProcessToken_Call {
+func (_c *MockTokenProcessor_ProcessToken_Call) Run(run func(ctx context.Context, r *requests.TokenRequest, token models.TokenReader, data map[string]interface{})) *MockTokenProcessor_ProcessToken_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(*requests.TokenRequest), args[2].(models.Token), args[3].(map[string]interface{}))
+		run(args[0].(context.Context), args[1].(*requests.TokenRequest), args[2].(models.TokenReader), args[3].(map[string]interface{}))
 	})
 	return _c
 }
@@ -68,7 +68,7 @@ func (_c *MockTokenProcessor_ProcessToken_Call) Return(_a0 error) *MockTokenProc
 	return _c
 }
 
-func (_c *MockTokenProcessor_ProcessToken_Call) RunAndReturn(run func(context.Context, *requests.TokenRequest, models.Token, map[string]interface{}) error) *MockTokenProcessor_ProcessToken_Call {
+func (_c *MockTokenProcessor_ProcessToken_Call) RunAndReturn(run func(context.Context, *requests.TokenRequest, models.TokenReader, map[string]interface{}) error) *MockTokenProcessor_ProcessToken_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -6,65 +6,51 @@ import (
 	"github.com/alkeyio/authkit/types"
 )
 
+// AuthorizationCodeReader provides read-only access to an authorization code.
+// Use this interface in call sites that only need to inspect code fields
+// (e.g. token processors, introspection, logging).
+type AuthorizationCodeReader interface {
+	GetCode() string
+	GetClientID() string
+	GetUserID() string
+	GetRedirectURI() string
+	GetResponseType() types.ResponseType
+	GetScopes() types.Scopes
+	GetNonce() string
+	GetState() string
+	GetAuthTime() time.Time
+	GetExpiresIn() time.Duration
+	GetCodeChallenge() string
+	GetCodeChallengeMethod() types.CodeChallengeMethod
+}
+
+// AuthorizationCodeWriter provides write-only access to an authorization code.
+// Use this interface in call sites that only need to populate code fields
+// (e.g. code generators).
+type AuthorizationCodeWriter interface {
+	SetCode(code string)
+	SetClientID(clientID string)
+	SetUserID(userID string)
+	SetRedirectURI(redirectURI string)
+	SetResponseType(rt types.ResponseType)
+	SetScopes(scopes types.Scopes)
+	SetNonce(nonce string)
+	SetState(state string)
+	SetAuthTime(time.Time)
+	SetExpiresIn(time.Duration)
+	SetCodeChallenge(codeChallenge string)
+	SetCodeChallengeMethod(method types.CodeChallengeMethod)
+}
+
 // AuthorizationCode represents an OAuth 2.0 authorization code issued at the
 // authorization endpoint. Implement this interface with your own data model
 // and pass instances through the authorization code grant flow.
+//
+// It composes AuthorizationCodeReader and AuthorizationCodeWriter so callers
+// that only need read or write access can declare the narrower interface.
 type AuthorizationCode interface {
-	// GetCode / SetCode get and set the authorization code string.
-	GetCode() string
-	SetCode(code string)
-
-	// GetClientID / SetClientID get and set the client the code was issued to.
-	GetClientID() string
-	SetClientID(clientID string)
-
-	// GetUserID / SetUserID get and set the user who authorized the request.
-	GetUserID() string
-	SetUserID(userID string)
-
-	// GetRedirectURI / SetRedirectURI get and set the redirect URI from the
-	// authorization request. Must be verified again at the token endpoint.
-	GetRedirectURI() string
-	SetRedirectURI(redirectURI string)
-
-	// GetResponseType / SetResponseType get and set the response_type from
-	// the authorization request.
-	GetResponseType() types.ResponseType
-	SetResponseType(rt types.ResponseType)
-
-	// GetScopes / SetScopes get and set the approved scopes.
-	GetScopes() types.Scopes
-	SetScopes(scopes types.Scopes)
-
-	// GetNonce / SetNonce get and set the OIDC nonce value to be forwarded
-	// to the ID token.
-	GetNonce() string
-	SetNonce(nonce string)
-
-	// GetState / SetState get and set the state parameter echoed from the
-	// authorization request.
-	GetState() string
-	SetState(state string)
-
-	// GetAuthTime / SetAuthTime get and set the time the user authenticated.
-	GetAuthTime() time.Time
-	SetAuthTime(time.Time)
-
-	// GetExpiresIn / SetExpiresIn get and set the code lifetime. The
-	// authorization server MUST expire codes after a short period
-	// (RFC 6749 §4.1.2 recommends a maximum of 10 minutes).
-	GetExpiresIn() time.Duration
-	SetExpiresIn(time.Duration)
-
-	// GetCodeChallenge / SetCodeChallenge get and set the PKCE code challenge
-	// (RFC 7636).
-	GetCodeChallenge() string
-	SetCodeChallenge(codeChallenge string)
-
-	// GetCodeChallengeMethod / SetCodeChallengeMethod get and set the PKCE
-	// challenge method ("plain" or "S256").
-	GetCodeChallengeMethod() types.CodeChallengeMethod
-	SetCodeChallengeMethod(method types.CodeChallengeMethod)
+	AuthorizationCodeReader
+	AuthorizationCodeWriter
 }
 
 // ExtendableAuthorizationCode extends AuthorizationCode with an arbitrary

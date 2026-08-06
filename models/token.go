@@ -6,54 +6,47 @@ import (
 	"github.com/alkeyio/authkit/types"
 )
 
+// TokenReader provides read-only access to a token.
+// Use this interface in call sites that only need to inspect token fields
+// (e.g. token processors, introspection, claim generation, logging).
+type TokenReader interface {
+	GetType() string
+	GetAccessToken() string
+	GetRefreshToken() string
+	GetClientID() string
+	GetScopes() types.Scopes
+	GetIssuedAt() time.Time
+	GetAccessTokenExpiresIn() time.Duration
+	GetRefreshTokenExpiresIn() time.Duration
+	GetUserID() string
+	GetJwtID() string
+}
+
+// TokenWriter provides write-only access to a token.
+// Use this interface in call sites that only need to populate token fields
+// (e.g. token generators).
+type TokenWriter interface {
+	SetType(string)
+	SetAccessToken(token string)
+	SetRefreshToken(token string)
+	SetClientID(clientID string)
+	SetScopes(scopes types.Scopes)
+	SetIssuedAt(issuedAt time.Time)
+	SetAccessTokenExpiresIn(exp time.Duration)
+	SetRefreshTokenExpiresIn(exp time.Duration)
+	SetUserID(userID string)
+	SetJwtID(id string)
+}
+
 // Token represents an issued OAuth 2.0 token. Implement this interface with
 // your own data model (e.g. a database-backed struct) and pass instances to
 // the grant flows and token generators.
+//
+// It composes TokenReader and TokenWriter so callers that only need read or
+// write access can declare the narrower interface.
 type Token interface {
-	// GetType / SetType get and set the token type (e.g. "Bearer").
-	GetType() string
-	SetType(string)
-
-	// GetAccessToken / SetAccessToken get and set the access token string.
-	GetAccessToken() string
-	SetAccessToken(token string)
-
-	// GetRefreshToken / SetRefreshToken get and set the refresh token string.
-	GetRefreshToken() string
-	SetRefreshToken(token string)
-
-	// GetClientID / SetClientID get and set the client identifier the token
-	// was issued to.
-	GetClientID() string
-	SetClientID(clientID string)
-
-	// GetScopes / SetScopes get and set the granted scopes.
-	GetScopes() types.Scopes
-	SetScopes(scopes types.Scopes)
-
-	// GetIssuedAt / SetIssuedAt get and set the time the token was issued.
-	GetIssuedAt() time.Time
-	SetIssuedAt(issuedAt time.Time)
-
-	// GetAccessTokenExpiresIn / SetAccessTokenExpiresIn get and set the
-	// access token lifetime.
-	GetAccessTokenExpiresIn() time.Duration
-	SetAccessTokenExpiresIn(exp time.Duration)
-
-	// GetRefreshTokenExpiresIn / SetRefreshTokenExpiresIn get and set the
-	// refresh token lifetime.
-	GetRefreshTokenExpiresIn() time.Duration
-	SetRefreshTokenExpiresIn(exp time.Duration)
-
-	// GetUserID / SetUserID get and set the user identifier the token was
-	// issued for. Empty for client credentials grants.
-	GetUserID() string
-	SetUserID(userID string)
-
-	// GetJwtID / SetJwtID get and set the JWT ID (jti) used in RFC 9068 JWT
-	// access tokens. May be empty for opaque tokens.
-	GetJwtID() string
-	SetJwtID(id string)
+	TokenReader
+	TokenWriter
 }
 
 // ExtendableToken extends Token with an arbitrary key-value map for storing
