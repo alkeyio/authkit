@@ -41,7 +41,7 @@ func TestJWTAccessTokenGenerator(t *testing.T) {
 			Scopes:    types.NewScopes([]string{"openid", "email", "phoneNumber"}),
 			Request:   httptest.NewRequest("POST", "/token", nil),
 		}
-		err := generator.Generate(mockToken, r)
+		err := generator.Generate(context.Background(), mockToken, r)
 		assert.NoError(t, err)
 		assert.Equal(t, mockClient.ClientID, mockToken.GetClientID())
 		assert.Equal(t, mockUser.GetUserID(), mockToken.GetUserID())
@@ -62,7 +62,7 @@ func TestJWTAccessTokenGenerator(t *testing.T) {
 			Client:    nil,
 			Request:   httptest.NewRequest("POST", "/token", nil),
 		}
-		err := generator.Generate(mockToken, r)
+		err := generator.Generate(context.Background(), mockToken, r)
 		assert.ErrorIs(t, err, ErrNilClient)
 	})
 
@@ -75,7 +75,7 @@ func TestJWTAccessTokenGenerator(t *testing.T) {
 			User:      nil,
 			Request:   httptest.NewRequest("POST", "/token", nil),
 		}
-		err := generator.Generate(mockToken, r)
+		err := generator.Generate(context.Background(), mockToken, r)
 		assert.NoError(t, err)
 		// Token model stores empty user ID for client_credentials; JWT sub = client_id.
 		assert.Empty(t, mockToken.GetUserID())
@@ -104,7 +104,7 @@ func TestJWTAccessTokenGenerator(t *testing.T) {
 			User:      mockUser,
 			Request:   httptest.NewRequest("POST", "/token", nil),
 		}
-		err := generator.Generate(mockToken, r)
+		err := generator.Generate(context.Background(), mockToken, r)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, mockToken.GetAccessToken())
 	})
@@ -124,7 +124,7 @@ func TestJWTAccessTokenGenerator(t *testing.T) {
 			Client:    mockClient,
 			Request:   httptest.NewRequest("POST", "/token", nil),
 		}
-		err := generator.Generate(mockToken, r)
+		err := generator.Generate(context.Background(), mockToken, r)
 		assert.ErrorIs(t, err, autherrors.ErrInsecureSigningMethod)
 	})
 }

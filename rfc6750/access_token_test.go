@@ -1,6 +1,7 @@
 package rfc6750
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -32,7 +33,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		r := newAccessTokenReq()
 		token := &sql.Token{}
 
-		err := NewOpaqueAccessTokenGenerator().Generate(token, r)
+		err := NewOpaqueAccessTokenGenerator().Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Equal(t, r.Client.GetClientID(), token.GetClientID())
 		assert.Equal(t, r.User.GetUserID(), token.GetUserID())
@@ -49,7 +50,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		r.User = nil
 		token := &sql.Token{}
 
-		err := NewOpaqueAccessTokenGenerator().Generate(token, r)
+		err := NewOpaqueAccessTokenGenerator().Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Empty(t, token.GetUserID())
 	})
@@ -63,7 +64,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		expInGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("*sql.Client")).Return(expected).Once()
 
 		opts := NewTokenGeneratorOptions().SetExpiresInGenerator(expInGen.Execute)
-		err := NewOpaqueAccessTokenGenerator(opts).Generate(token, r)
+		err := NewOpaqueAccessTokenGenerator(opts).Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Equal(t, expected, token.GetAccessTokenExpiresIn())
 	})
@@ -77,7 +78,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		strGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("*sql.Client")).Return(expected, nil).Once()
 
 		opts := NewTokenGeneratorOptions().SetRandStringGenerator(strGen.Execute)
-		err := NewOpaqueAccessTokenGenerator(opts).Generate(token, r)
+		err := NewOpaqueAccessTokenGenerator(opts).Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Equal(t, expected, token.GetAccessToken())
 	})
@@ -86,7 +87,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		r := newAccessTokenReq()
 		r.Client = nil
 
-		err := NewOpaqueAccessTokenGenerator().Generate(&sql.Token{}, r)
+		err := NewOpaqueAccessTokenGenerator().Generate(context.Background(), &sql.Token{}, r)
 		assert.ErrorIs(t, err, ErrNilClient)
 	})
 
@@ -95,7 +96,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		g := NewOpaqueAccessTokenGenerator()
 		g.tokenLength = 0
 
-		err := g.Generate(&sql.Token{}, r)
+		err := g.Generate(context.Background(), &sql.Token{}, r)
 		assert.ErrorIs(t, err, ErrInvalidTokenLength)
 	})
 
@@ -105,7 +106,7 @@ func TestOpaqueAccessTokenGenerator_Generate(t *testing.T) {
 		strGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("*sql.Client")).Return("", errors.New("entropy error")).Once()
 
 		opts := NewTokenGeneratorOptions().SetRandStringGenerator(strGen.Execute)
-		err := NewOpaqueAccessTokenGenerator(opts).Generate(&sql.Token{}, r)
+		err := NewOpaqueAccessTokenGenerator(opts).Generate(context.Background(), &sql.Token{}, r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "entropy error")
 	})

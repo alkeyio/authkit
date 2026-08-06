@@ -46,8 +46,8 @@ func (m *TokenManager) New() authkitmodels.Token {
 }
 
 // Generate populates the token fields using the bearer token generator.
-func (m *TokenManager) Generate(_ context.Context, token authkitmodels.Token, r *authkitrequests.TokenRequest, includeRefreshToken bool) error {
-	return m.gen.Generate(token, r, includeRefreshToken)
+func (m *TokenManager) Generate(ctx context.Context, token authkitmodels.Token, r *authkitrequests.TokenRequest, includeRefreshToken bool) error {
+	return m.gen.Generate(ctx, token, r, includeRefreshToken)
 }
 
 // Save persists a new token.

@@ -1,6 +1,7 @@
 package rfc6750
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,6 +38,7 @@ func TestTestBearerTokenGenerator(t *testing.T) {
 	atGenerator := rfc6750.NewMockTokenGenerator(t)
 	atGenerator.On(
 		"Generate",
+		mock.Anything,
 		mock.AnythingOfType("*sql.Token"),
 		mock.AnythingOfType("*requests.TokenRequest"),
 	).Return(nil).Once()
@@ -45,6 +47,7 @@ func TestTestBearerTokenGenerator(t *testing.T) {
 	rtGenerator := rfc6750.NewMockTokenGenerator(t)
 	rtGenerator.On(
 		"Generate",
+		mock.Anything,
 		mock.AnythingOfType("*sql.Token"),
 		mock.AnythingOfType("*requests.TokenRequest"),
 	).Return(nil).Once()
@@ -54,7 +57,7 @@ func TestTestBearerTokenGenerator(t *testing.T) {
 	r := &requests.TokenRequest{
 		GrantType: "password",
 	}
-	err := g.Generate(mockToken, r, true)
+	err := g.Generate(context.Background(), mockToken, r, true)
 	assert.NoError(t, err)
 	assert.Equal(t, TokenTypeBearer, mockToken.GetType())
 }

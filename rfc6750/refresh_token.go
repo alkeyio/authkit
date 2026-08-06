@@ -33,15 +33,9 @@ func NewOpaqueRefreshTokenGenerator(opts ...*TokenGeneratorOptions) *OpaqueRefre
 }
 
 // Generate populates token with a refresh token and its expiry duration.
-func (g *OpaqueRefreshTokenGenerator) Generate(token models.Token, r *requests.TokenRequest) error {
+func (g *OpaqueRefreshTokenGenerator) Generate(ctx context.Context, token models.Token, r *requests.TokenRequest) error {
 	if utils.IsNil(r.Client) {
 		return ErrNilClient
-	}
-
-	// Prefer request context for custom generators; fall back to Background.
-	ctx := context.Background()
-	if r.Request != nil {
-		ctx = r.Request.Context()
 	}
 
 	expiresIn := g.expiresInHandler(ctx, r.GrantType.String(), r.Client)

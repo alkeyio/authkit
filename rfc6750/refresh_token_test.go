@@ -1,6 +1,7 @@
 package rfc6750
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -27,7 +28,7 @@ func TestOpaqueRefreshTokenGenerator_Generate(t *testing.T) {
 		r := newRefreshTokenReq()
 		token := &sql.Token{}
 
-		err := NewOpaqueRefreshTokenGenerator().Generate(token, r)
+		err := NewOpaqueRefreshTokenGenerator().Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Equal(t, DefaultTokenLength, len(token.GetRefreshToken()))
 		assert.Equal(t, DefaultRefreshTokenExpiresIn, token.GetRefreshTokenExpiresIn())
@@ -42,7 +43,7 @@ func TestOpaqueRefreshTokenGenerator_Generate(t *testing.T) {
 		expInGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("*sql.Client")).Return(expected).Once()
 
 		opts := NewTokenGeneratorOptions().SetExpiresInGenerator(expInGen.Execute)
-		err := NewOpaqueRefreshTokenGenerator(opts).Generate(token, r)
+		err := NewOpaqueRefreshTokenGenerator(opts).Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Equal(t, expected, token.GetRefreshTokenExpiresIn())
 	})
@@ -56,7 +57,7 @@ func TestOpaqueRefreshTokenGenerator_Generate(t *testing.T) {
 		strGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("*sql.Client")).Return(expected, nil).Once()
 
 		opts := NewTokenGeneratorOptions().SetRandStringGenerator(strGen.Execute)
-		err := NewOpaqueRefreshTokenGenerator(opts).Generate(token, r)
+		err := NewOpaqueRefreshTokenGenerator(opts).Generate(context.Background(), token, r)
 		require.NoError(t, err)
 		assert.Equal(t, expected, token.GetRefreshToken())
 	})
@@ -65,7 +66,7 @@ func TestOpaqueRefreshTokenGenerator_Generate(t *testing.T) {
 		r := newRefreshTokenReq()
 		r.Client = nil
 
-		err := NewOpaqueRefreshTokenGenerator().Generate(&sql.Token{}, r)
+		err := NewOpaqueRefreshTokenGenerator().Generate(context.Background(), &sql.Token{}, r)
 		assert.ErrorIs(t, err, ErrNilClient)
 	})
 
@@ -74,7 +75,7 @@ func TestOpaqueRefreshTokenGenerator_Generate(t *testing.T) {
 		g := NewOpaqueRefreshTokenGenerator()
 		g.tokenLength = 0
 
-		err := g.Generate(&sql.Token{}, r)
+		err := g.Generate(context.Background(), &sql.Token{}, r)
 		assert.ErrorIs(t, err, ErrInvalidTokenLength)
 	})
 
@@ -84,7 +85,7 @@ func TestOpaqueRefreshTokenGenerator_Generate(t *testing.T) {
 		strGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("*sql.Client")).Return("", errors.New("entropy error")).Once()
 
 		opts := NewTokenGeneratorOptions().SetRandStringGenerator(strGen.Execute)
-		err := NewOpaqueRefreshTokenGenerator(opts).Generate(&sql.Token{}, r)
+		err := NewOpaqueRefreshTokenGenerator(opts).Generate(context.Background(), &sql.Token{}, r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "entropy error")
 	})

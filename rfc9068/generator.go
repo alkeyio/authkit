@@ -53,17 +53,10 @@ func MustJWTAccessTokenGenerator(cfg *GeneratorConfig) (*JWTAccessTokenGenerator
 // The JWT carries the standard RFC 9068 claims (iss, sub, aud, exp, iat, jti,
 // client_id, scope). Extra claims can be added via GeneratorConfig.SetExtraClaimGenerator.
 // User may be nil (e.g. client credentials); in that case sub is set to client_id.
-func (g *JWTAccessTokenGenerator) Generate(token models.Token, r *requests.TokenRequest) error {
+func (g *JWTAccessTokenGenerator) Generate(ctx context.Context, token models.Token, r *requests.TokenRequest) error {
 	client := r.Client
 	if utils.IsNil(client) {
 		return ErrNilClient
-	}
-
-	// Prefer request context for custom generators; fall back to Background when
-	// called outside an HTTP request (e.g. unit tests).
-	ctx := context.Background()
-	if r.Request != nil {
-		ctx = r.Request.Context()
 	}
 
 	clientID := client.GetClientID()

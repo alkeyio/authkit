@@ -37,18 +37,10 @@ func NewOpaqueAccessTokenGenerator(opts ...*TokenGeneratorOptions) *OpaqueAccess
 
 // Generate populates token with an opaque access token derived from the request.
 // User may be nil (e.g. client credentials flow); in that case UserID is left empty.
-func (g *OpaqueAccessTokenGenerator) Generate(token models.Token, r *requests.TokenRequest) error {
+func (g *OpaqueAccessTokenGenerator) Generate(ctx context.Context, token models.Token, r *requests.TokenRequest) error {
 	client := r.Client
 	if utils.IsNil(client) {
 		return ErrNilClient
-	}
-
-	// Prefer request context so custom generators can do context-aware work
-	// (e.g. database lookups). Fall back to Background when called outside
-	//  an HTTP request (e.g. unit tests).
-	ctx := context.Background()
-	if r.Request != nil {
-		ctx = r.Request.Context()
 	}
 
 	token.SetClientID(client.GetClientID())

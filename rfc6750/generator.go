@@ -1,6 +1,8 @@
 package rfc6750
 
 import (
+	"context"
+
 	"github.com/alkeyio/authkit/models"
 	"github.com/alkeyio/authkit/requests"
 )
@@ -45,14 +47,14 @@ func MustBearerTokenGenerator(opts *BearerTokenGeneratorOptions) (*BearerTokenGe
 
 // Generate populates token with a Bearer access token and, when includeRefreshToken
 // is true, a refresh token.
-func (g *BearerTokenGenerator) Generate(token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error {
+func (g *BearerTokenGenerator) Generate(ctx context.Context, token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error {
 	if includeRefreshToken {
-		if err := g.rfGen.Generate(token, r); err != nil {
+		if err := g.rfGen.Generate(ctx, token, r); err != nil {
 			return err
 		}
 	}
 
-	if err := g.atGen.Generate(token, r); err != nil {
+	if err := g.atGen.Generate(ctx, token, r); err != nil {
 		return err
 	}
 

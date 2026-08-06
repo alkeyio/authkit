@@ -3,6 +3,8 @@
 package rfc6750
 
 import (
+	context "context"
+
 	models "github.com/alkeyio/authkit/models"
 	mock "github.com/stretchr/testify/mock"
 
@@ -22,17 +24,17 @@ func (_m *MockTokenGenerator) EXPECT() *MockTokenGenerator_Expecter {
 	return &MockTokenGenerator_Expecter{mock: &_m.Mock}
 }
 
-// Generate provides a mock function with given fields: token, r
-func (_m *MockTokenGenerator) Generate(token models.Token, r *requests.TokenRequest) error {
-	ret := _m.Called(token, r)
+// Generate provides a mock function with given fields: ctx, token, r
+func (_m *MockTokenGenerator) Generate(ctx context.Context, token models.Token, r *requests.TokenRequest) error {
+	ret := _m.Called(ctx, token, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Generate")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.Token, *requests.TokenRequest) error); ok {
-		r0 = rf(token, r)
+	if rf, ok := ret.Get(0).(func(context.Context, models.Token, *requests.TokenRequest) error); ok {
+		r0 = rf(ctx, token, r)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -46,15 +48,16 @@ type MockTokenGenerator_Generate_Call struct {
 }
 
 // Generate is a helper method to define mock.On call
+//   - ctx context.Context
 //   - token models.Token
 //   - r *requests.TokenRequest
-func (_e *MockTokenGenerator_Expecter) Generate(token interface{}, r interface{}) *MockTokenGenerator_Generate_Call {
-	return &MockTokenGenerator_Generate_Call{Call: _e.mock.On("Generate", token, r)}
+func (_e *MockTokenGenerator_Expecter) Generate(ctx interface{}, token interface{}, r interface{}) *MockTokenGenerator_Generate_Call {
+	return &MockTokenGenerator_Generate_Call{Call: _e.mock.On("Generate", ctx, token, r)}
 }
 
-func (_c *MockTokenGenerator_Generate_Call) Run(run func(token models.Token, r *requests.TokenRequest)) *MockTokenGenerator_Generate_Call {
+func (_c *MockTokenGenerator_Generate_Call) Run(run func(ctx context.Context, token models.Token, r *requests.TokenRequest)) *MockTokenGenerator_Generate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(models.Token), args[1].(*requests.TokenRequest))
+		run(args[0].(context.Context), args[1].(models.Token), args[2].(*requests.TokenRequest))
 	})
 	return _c
 }
@@ -64,7 +67,7 @@ func (_c *MockTokenGenerator_Generate_Call) Return(_a0 error) *MockTokenGenerato
 	return _c
 }
 
-func (_c *MockTokenGenerator_Generate_Call) RunAndReturn(run func(models.Token, *requests.TokenRequest) error) *MockTokenGenerator_Generate_Call {
+func (_c *MockTokenGenerator_Generate_Call) RunAndReturn(run func(context.Context, models.Token, *requests.TokenRequest) error) *MockTokenGenerator_Generate_Call {
 	_c.Call.Return(run)
 	return _c
 }

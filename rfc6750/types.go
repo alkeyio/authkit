@@ -21,5 +21,5 @@ type RandStringGenerator func(ctx context.Context, grantType string, client mode
 // TokenGenerator is the common interface implemented by both
 // OpaqueAccessTokenGenerator and OpaqueRefreshTokenGenerator.
 type TokenGenerator interface {
-	Generate(token models.Token, r *requests.TokenRequest) error
+	Generate(ctx context.Context, token models.Token, r *requests.TokenRequest) error
 }
