@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewTokenRequestFromHttp(t *testing.T) {

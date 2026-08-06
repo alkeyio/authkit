@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/mocks/oidc/core/authorization_code"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestConfig(t *testing.T) {
