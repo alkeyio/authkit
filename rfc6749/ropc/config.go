@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/alkeyio/authkit/rfc6749"
 	"github.com/alkeyio/authkit/types"
 	"github.com/alkeyio/authkit/utils"
 )
@@ -18,16 +19,18 @@ var (
 
 // OmittedScopePolicy controls how the token endpoint behaves when the client
 // does not include a scope parameter in the request (RFC 6749 §3.3).
-type OmittedScopePolicy int
+// This is an alias for rfc6749.OmittedScopePolicy; the canonical definition
+// lives in the parent package so all grant flows share a single type.
+type OmittedScopePolicy = rfc6749.OmittedScopePolicy
 
 const (
 	// OmittedScopePolicyReject rejects the request with invalid_scope when
 	// the scope parameter is absent. This is the default.
-	OmittedScopePolicyReject OmittedScopePolicy = iota
+	OmittedScopePolicyReject = rfc6749.OmittedScopePolicyReject
 
 	// OmittedScopePolicyUseClientDefault grants the client's full registered
 	// scope list when the scope parameter is absent.
-	OmittedScopePolicyUseClientDefault
+	OmittedScopePolicyUseClientDefault = rfc6749.OmittedScopePolicyUseClientDefault
 )
 
 // Config holds all dependencies and extension hooks for the ROPC flow.
