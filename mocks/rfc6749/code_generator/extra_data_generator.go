@@ -3,6 +3,8 @@
 package codegen
 
 import (
+	context "context"
+
 	requests "github.com/alkeyio/authkit/requests"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -20,9 +22,9 @@ func (_m *MockExtraDataGenerator) EXPECT() *MockExtraDataGenerator_Expecter {
 	return &MockExtraDataGenerator_Expecter{mock: &_m.Mock}
 }
 
-// Execute provides a mock function with given fields: r
-func (_m *MockExtraDataGenerator) Execute(r *requests.AuthorizationRequest) (map[string]interface{}, error) {
-	ret := _m.Called(r)
+// Execute provides a mock function with given fields: ctx, r
+func (_m *MockExtraDataGenerator) Execute(ctx context.Context, r *requests.AuthorizationRequest) (map[string]interface{}, error) {
+	ret := _m.Called(ctx, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Execute")
@@ -30,19 +32,19 @@ func (_m *MockExtraDataGenerator) Execute(r *requests.AuthorizationRequest) (map
 
 	var r0 map[string]interface{}
 	var r1 error
-	if rf, ok := ret.Get(0).(func(*requests.AuthorizationRequest) (map[string]interface{}, error)); ok {
-		return rf(r)
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.AuthorizationRequest) (map[string]interface{}, error)); ok {
+		return rf(ctx, r)
 	}
-	if rf, ok := ret.Get(0).(func(*requests.AuthorizationRequest) map[string]interface{}); ok {
-		r0 = rf(r)
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.AuthorizationRequest) map[string]interface{}); ok {
+		r0 = rf(ctx, r)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(map[string]interface{})
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(*requests.AuthorizationRequest) error); ok {
-		r1 = rf(r)
+	if rf, ok := ret.Get(1).(func(context.Context, *requests.AuthorizationRequest) error); ok {
+		r1 = rf(ctx, r)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -56,14 +58,15 @@ type MockExtraDataGenerator_Execute_Call struct {
 }
 
 // Execute is a helper method to define mock.On call
+//   - ctx context.Context
 //   - r *requests.AuthorizationRequest
-func (_e *MockExtraDataGenerator_Expecter) Execute(r interface{}) *MockExtraDataGenerator_Execute_Call {
-	return &MockExtraDataGenerator_Execute_Call{Call: _e.mock.On("Execute", r)}
+func (_e *MockExtraDataGenerator_Expecter) Execute(ctx interface{}, r interface{}) *MockExtraDataGenerator_Execute_Call {
+	return &MockExtraDataGenerator_Execute_Call{Call: _e.mock.On("Execute", ctx, r)}
 }
 
-func (_c *MockExtraDataGenerator_Execute_Call) Run(run func(r *requests.AuthorizationRequest)) *MockExtraDataGenerator_Execute_Call {
+func (_c *MockExtraDataGenerator_Execute_Call) Run(run func(ctx context.Context, r *requests.AuthorizationRequest)) *MockExtraDataGenerator_Execute_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*requests.AuthorizationRequest))
+		run(args[0].(context.Context), args[1].(*requests.AuthorizationRequest))
 	})
 	return _c
 }
@@ -73,7 +76,7 @@ func (_c *MockExtraDataGenerator_Execute_Call) Return(_a0 map[string]interface{}
 	return _c
 }
 
-func (_c *MockExtraDataGenerator_Execute_Call) RunAndReturn(run func(*requests.AuthorizationRequest) (map[string]interface{}, error)) *MockExtraDataGenerator_Execute_Call {
+func (_c *MockExtraDataGenerator_Execute_Call) RunAndReturn(run func(context.Context, *requests.AuthorizationRequest) (map[string]interface{}, error)) *MockExtraDataGenerator_Execute_Call {
 	_c.Call.Return(run)
 	return _c
 }

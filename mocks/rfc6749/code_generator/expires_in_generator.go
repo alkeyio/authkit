@@ -3,6 +3,8 @@
 package codegen
 
 import (
+	context "context"
+
 	models "github.com/alkeyio/authkit/models"
 	mock "github.com/stretchr/testify/mock"
 
@@ -24,17 +26,17 @@ func (_m *MockExpiresInGenerator) EXPECT() *MockExpiresInGenerator_Expecter {
 	return &MockExpiresInGenerator_Expecter{mock: &_m.Mock}
 }
 
-// Execute provides a mock function with given fields: gt, client
-func (_m *MockExpiresInGenerator) Execute(gt types.GrantType, client models.Client) time.Duration {
-	ret := _m.Called(gt, client)
+// Execute provides a mock function with given fields: ctx, gt, client
+func (_m *MockExpiresInGenerator) Execute(ctx context.Context, gt types.GrantType, client models.Client) time.Duration {
+	ret := _m.Called(ctx, gt, client)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Execute")
 	}
 
 	var r0 time.Duration
-	if rf, ok := ret.Get(0).(func(types.GrantType, models.Client) time.Duration); ok {
-		r0 = rf(gt, client)
+	if rf, ok := ret.Get(0).(func(context.Context, types.GrantType, models.Client) time.Duration); ok {
+		r0 = rf(ctx, gt, client)
 	} else {
 		r0 = ret.Get(0).(time.Duration)
 	}
@@ -48,15 +50,16 @@ type MockExpiresInGenerator_Execute_Call struct {
 }
 
 // Execute is a helper method to define mock.On call
+//   - ctx context.Context
 //   - gt types.GrantType
 //   - client models.Client
-func (_e *MockExpiresInGenerator_Expecter) Execute(gt interface{}, client interface{}) *MockExpiresInGenerator_Execute_Call {
-	return &MockExpiresInGenerator_Execute_Call{Call: _e.mock.On("Execute", gt, client)}
+func (_e *MockExpiresInGenerator_Expecter) Execute(ctx interface{}, gt interface{}, client interface{}) *MockExpiresInGenerator_Execute_Call {
+	return &MockExpiresInGenerator_Execute_Call{Call: _e.mock.On("Execute", ctx, gt, client)}
 }
 
-func (_c *MockExpiresInGenerator_Execute_Call) Run(run func(gt types.GrantType, client models.Client)) *MockExpiresInGenerator_Execute_Call {
+func (_c *MockExpiresInGenerator_Execute_Call) Run(run func(ctx context.Context, gt types.GrantType, client models.Client)) *MockExpiresInGenerator_Execute_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(types.GrantType), args[1].(models.Client))
+		run(args[0].(context.Context), args[1].(types.GrantType), args[2].(models.Client))
 	})
 	return _c
 }
@@ -66,7 +69,7 @@ func (_c *MockExpiresInGenerator_Execute_Call) Return(_a0 time.Duration) *MockEx
 	return _c
 }
 
-func (_c *MockExpiresInGenerator_Execute_Call) RunAndReturn(run func(types.GrantType, models.Client) time.Duration) *MockExpiresInGenerator_Execute_Call {
+func (_c *MockExpiresInGenerator_Execute_Call) RunAndReturn(run func(context.Context, types.GrantType, models.Client) time.Duration) *MockExpiresInGenerator_Execute_Call {
 	_c.Call.Return(run)
 	return _c
 }

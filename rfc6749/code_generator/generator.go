@@ -41,7 +41,7 @@ func New(opts ...*Options) *Generator {
 // auth_time, and expires_in. If an ExtraDataGenerator is configured and
 // authCode implements models.ExtendableAuthorizationCode, its output is stored
 // via SetExtraData.
-func (g *Generator) Generate(_ context.Context, authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error {
+func (g *Generator) Generate(ctx context.Context, authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error {
 	client := r.Client
 	if utils.IsNil(client) {
 		return ErrNilClient
@@ -52,7 +52,7 @@ func (g *Generator) Generate(_ context.Context, authCode models.AuthorizationCod
 		return ErrNilUser
 	}
 
-	code, err := g.genCode(r.GrantType, client)
+	code, err := g.genCode(ctx, r.GrantType, client)
 	if err != nil {
 		return err
 	}
@@ -65,12 +65,12 @@ func (g *Generator) Generate(_ context.Context, authCode models.AuthorizationCod
 	authCode.SetScopes(r.Scopes)
 	authCode.SetState(r.State)
 	authCode.SetAuthTime(time.Now().UTC().Round(time.Second))
-	exp := g.expiresInHandler(r.GrantType, client)
+	exp := g.expiresInHandler(ctx, r.GrantType, client)
 	authCode.SetExpiresIn(exp)
 
 	if fn := g.extraDataGenerator; fn != nil {
 		if extAuthCode, ok := authCode.(models.ExtendableAuthorizationCode); ok {
-			data, err := fn(r)
+			data, err := fn(ctx, r)
 			if err != nil {
 				return err
 			}
@@ -85,9 +85,9 @@ func (g *Generator) Generate(_ context.Context, authCode models.AuthorizationCod
 // configured it is called; otherwise a cryptographically secure random string
 // of codeLength alphanumeric characters is produced via crypto/rand. Returns
 // ErrInvalidCodeLength when codeLength < 1.
-func (g *Generator) genCode(grantType types.GrantType, client models.Client) (string, error) {
+func (g *Generator) genCode(ctx context.Context, grantType types.GrantType, client models.Client) (string, error) {
 	if fn := g.randStringGenerator; fn != nil {
-		return fn(grantType, client)
+		return fn(ctx, grantType, client)
 	}
 
 	if g.codeLength < 1 {
@@ -99,9 +99,9 @@ func (g *Generator) genCode(grantType types.GrantType, client models.Client) (st
 
 // expiresInHandler returns the code lifetime. If an ExpiresInGenerator is
 // configured it is called; otherwise the static expiresIn value is returned.
-func (g *Generator) expiresInHandler(grantType types.GrantType, client models.Client) time.Duration {
+func (g *Generator) expiresInHandler(ctx context.Context, grantType types.GrantType, client models.Client) time.Duration {
 	if fn := g.expiresInGenerator; fn != nil {
-		return fn(grantType, client)
+		return fn(ctx, grantType, client)
 	}
 
 	return g.expiresIn

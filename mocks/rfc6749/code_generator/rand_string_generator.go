@@ -3,6 +3,8 @@
 package codegen
 
 import (
+	context "context"
+
 	models "github.com/alkeyio/authkit/models"
 	mock "github.com/stretchr/testify/mock"
 
@@ -22,9 +24,9 @@ func (_m *MockRandStringGenerator) EXPECT() *MockRandStringGenerator_Expecter {
 	return &MockRandStringGenerator_Expecter{mock: &_m.Mock}
 }
 
-// Execute provides a mock function with given fields: gt, client
-func (_m *MockRandStringGenerator) Execute(gt types.GrantType, client models.Client) (string, error) {
-	ret := _m.Called(gt, client)
+// Execute provides a mock function with given fields: ctx, gt, client
+func (_m *MockRandStringGenerator) Execute(ctx context.Context, gt types.GrantType, client models.Client) (string, error) {
+	ret := _m.Called(ctx, gt, client)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Execute")
@@ -32,17 +34,17 @@ func (_m *MockRandStringGenerator) Execute(gt types.GrantType, client models.Cli
 
 	var r0 string
 	var r1 error
-	if rf, ok := ret.Get(0).(func(types.GrantType, models.Client) (string, error)); ok {
-		return rf(gt, client)
+	if rf, ok := ret.Get(0).(func(context.Context, types.GrantType, models.Client) (string, error)); ok {
+		return rf(ctx, gt, client)
 	}
-	if rf, ok := ret.Get(0).(func(types.GrantType, models.Client) string); ok {
-		r0 = rf(gt, client)
+	if rf, ok := ret.Get(0).(func(context.Context, types.GrantType, models.Client) string); ok {
+		r0 = rf(ctx, gt, client)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
-	if rf, ok := ret.Get(1).(func(types.GrantType, models.Client) error); ok {
-		r1 = rf(gt, client)
+	if rf, ok := ret.Get(1).(func(context.Context, types.GrantType, models.Client) error); ok {
+		r1 = rf(ctx, gt, client)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -56,15 +58,16 @@ type MockRandStringGenerator_Execute_Call struct {
 }
 
 // Execute is a helper method to define mock.On call
+//   - ctx context.Context
 //   - gt types.GrantType
 //   - client models.Client
-func (_e *MockRandStringGenerator_Expecter) Execute(gt interface{}, client interface{}) *MockRandStringGenerator_Execute_Call {
-	return &MockRandStringGenerator_Execute_Call{Call: _e.mock.On("Execute", gt, client)}
+func (_e *MockRandStringGenerator_Expecter) Execute(ctx interface{}, gt interface{}, client interface{}) *MockRandStringGenerator_Execute_Call {
+	return &MockRandStringGenerator_Execute_Call{Call: _e.mock.On("Execute", ctx, gt, client)}
 }
 
-func (_c *MockRandStringGenerator_Execute_Call) Run(run func(gt types.GrantType, client models.Client)) *MockRandStringGenerator_Execute_Call {
+func (_c *MockRandStringGenerator_Execute_Call) Run(run func(ctx context.Context, gt types.GrantType, client models.Client)) *MockRandStringGenerator_Execute_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(types.GrantType), args[1].(models.Client))
+		run(args[0].(context.Context), args[1].(types.GrantType), args[2].(models.Client))
 	})
 	return _c
 }
@@ -74,7 +77,7 @@ func (_c *MockRandStringGenerator_Execute_Call) Return(_a0 string, _a1 error) *M
 	return _c
 }
 
-func (_c *MockRandStringGenerator_Execute_Call) RunAndReturn(run func(types.GrantType, models.Client) (string, error)) *MockRandStringGenerator_Execute_Call {
+func (_c *MockRandStringGenerator_Execute_Call) RunAndReturn(run func(context.Context, types.GrantType, models.Client) (string, error)) *MockRandStringGenerator_Execute_Call {
 	_c.Call.Return(run)
 	return _c
 }

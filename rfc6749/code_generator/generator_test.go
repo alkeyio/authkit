@@ -43,7 +43,7 @@ func TestGenerator_Generate(t *testing.T) {
 		mockAuthCode := &sql.AuthorizationCode{}
 		extraDataGen := codegen.NewMockExtraDataGenerator(t)
 		extraData := map[string]interface{}{"session_id": uuid.NewString()}
-		extraDataGen.EXPECT().Execute(mock.AnythingOfType("*requests.AuthorizationRequest")).Return(extraData, nil).Once()
+		extraDataGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("*requests.AuthorizationRequest")).Return(extraData, nil).Once()
 
 		g := New(NewOptions().SetExtraDataGenerator(extraDataGen.Execute))
 		err := g.Generate(context.Background(), mockAuthCode, r)
@@ -90,7 +90,7 @@ func TestGenerator_Generate(t *testing.T) {
 	t.Run("error_when_extra_data_generator_fails", func(t *testing.T) {
 		r := newReq()
 		extraDataGen := codegen.NewMockExtraDataGenerator(t)
-		extraDataGen.EXPECT().Execute(mock.AnythingOfType("*requests.AuthorizationRequest")).Return(nil, errors.New("store error")).Once()
+		extraDataGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("*requests.AuthorizationRequest")).Return(nil, errors.New("store error")).Once()
 
 		g := New(NewOptions().SetExtraDataGenerator(extraDataGen.Execute))
 		err := g.Generate(context.Background(), &sql.AuthorizationCode{}, r)
@@ -105,27 +105,27 @@ func TestGenerator_genCode(t *testing.T) {
 	t.Run("success_with_custom_generator", func(t *testing.T) {
 		strGen := codegen.NewMockRandStringGenerator(t)
 		expected := "thisIsARandomString"
-		strGen.EXPECT().Execute(mock.AnythingOfType("types.GrantType"), mock.AnythingOfType("*sql.Client")).Return(expected, nil).Once()
+		strGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("types.GrantType"), mock.AnythingOfType("*sql.Client")).Return(expected, nil).Once()
 
 		g := New(NewOptions().SetRandStringGenerator(strGen.Execute))
-		s, err := g.genCode(types.GrantTypeAuthorizationCode, mockClient)
+		s, err := g.genCode(context.Background(), types.GrantTypeAuthorizationCode, mockClient)
 		assert.NoError(t, err)
 		assert.Equal(t, expected, s)
 	})
 
 	t.Run("error_from_custom_generator", func(t *testing.T) {
 		strGen := codegen.NewMockRandStringGenerator(t)
-		strGen.EXPECT().Execute(mock.AnythingOfType("types.GrantType"), mock.AnythingOfType("*sql.Client")).Return("", errors.New("entropy error")).Once()
+		strGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("types.GrantType"), mock.AnythingOfType("*sql.Client")).Return("", errors.New("entropy error")).Once()
 
 		g := New(NewOptions().SetRandStringGenerator(strGen.Execute))
-		_, err := g.genCode(types.GrantTypeAuthorizationCode, mockClient)
+		_, err := g.genCode(context.Background(), types.GrantTypeAuthorizationCode, mockClient)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "entropy error")
 	})
 
 	t.Run("success_with_default_generator", func(t *testing.T) {
 		g := New(NewOptions())
-		s, err := g.genCode(types.GrantTypeAuthorizationCode, mockClient)
+		s, err := g.genCode(context.Background(), types.GrantTypeAuthorizationCode, mockClient)
 		assert.NoError(t, err)
 		assert.Equal(t, DefaultCodeLength, len(s))
 	})
@@ -133,7 +133,7 @@ func TestGenerator_genCode(t *testing.T) {
 	t.Run("error_when_code_length_is_zero", func(t *testing.T) {
 		g := New(NewOptions())
 		g.codeLength = 0
-		_, err := g.genCode(types.GrantTypeAuthorizationCode, mockClient)
+		_, err := g.genCode(context.Background(), types.GrantTypeAuthorizationCode, mockClient)
 		assert.ErrorIs(t, err, ErrInvalidCodeLength)
 	})
 }
@@ -141,16 +141,16 @@ func TestGenerator_genCode(t *testing.T) {
 func TestGenerator_expiresInHandler(t *testing.T) {
 	expInGen := codegen.NewMockExpiresInGenerator(t)
 	expected := 10 * time.Minute
-	expInGen.EXPECT().Execute(mock.AnythingOfType("types.GrantType"), mock.AnythingOfType("*sql.Client")).Return(expected).Once()
+	expInGen.EXPECT().Execute(mock.Anything, mock.AnythingOfType("types.GrantType"), mock.AnythingOfType("*sql.Client")).Return(expected).Once()
 
 	mockClient := &sql.Client{}
 	g := New(NewOptions().SetExpiresInGenerator(expInGen.Execute))
-	exp := g.expiresInHandler(types.GrantTypeAuthorizationCode, mockClient)
+	exp := g.expiresInHandler(context.Background(), types.GrantTypeAuthorizationCode, mockClient)
 	assert.Equal(t, expected, exp)
 
 	expected = 30 * time.Minute
 	g.SetExpiresInGenerator(nil)
 	g.SetExpiresIn(expected)
-	exp = g.expiresInHandler(types.GrantTypeAuthorizationCode, mockClient)
+	exp = g.expiresInHandler(context.Background(), types.GrantTypeAuthorizationCode, mockClient)
 	assert.Equal(t, expected, exp)
 }
