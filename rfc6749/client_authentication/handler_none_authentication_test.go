@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/alkeyio/authkit/integrations/sql"
 	rfc6749 "github.com/alkeyio/authkit/mocks/rfc6749/client_authentication"
 	"github.com/alkeyio/authkit/types"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestNewNoneAuthHandler(t *testing.T) {

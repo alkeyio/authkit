@@ -85,7 +85,7 @@ func (f *Flow) ValidateAuthorizationRequest(r *requests.AuthorizationRequest) er
 
 	r.GrantType = types.GrantTypeAuthorizationCode
 	for _, h := range f.authReqValidators {
-		if err := h.ValidateAuthorizationRequest(r); err != nil {
+		if err := h.ValidateAuthorizationRequest(r.Request.Context(), r); err != nil {
 			return err
 		}
 	}
@@ -102,7 +102,7 @@ func (f *Flow) ValidateConsentRequest(r *requests.AuthorizationRequest) error {
 	}
 
 	for _, h := range f.consentReqValidators {
-		if err := h.ValidateConsentRequest(r); err != nil {
+		if err := h.ValidateConsentRequest(r.Request.Context(), r); err != nil {
 			return err
 		}
 	}
@@ -132,7 +132,7 @@ func (f *Flow) AuthorizationResponse(r *requests.AuthorizationRequest, rw http.R
 	}
 
 	for _, h := range f.authCodeProcessors {
-		if err = h.ProcessAuthorizationCode(r, authCode, params); err != nil {
+		if err = h.ProcessAuthorizationCode(r.Request.Context(), r, authCode, params); err != nil {
 			return err
 		}
 	}
@@ -165,7 +165,7 @@ func (f *Flow) ValidateTokenRequest(r *requests.TokenRequest) error {
 	}
 
 	for _, h := range f.tokenReqValidators {
-		if err := h.ValidateTokenRequest(r); err != nil {
+		if err := h.ValidateTokenRequest(r.Request.Context(), r); err != nil {
 			return err
 		}
 	}
@@ -351,7 +351,7 @@ func (f *Flow) validateGrantType(r *requests.TokenRequest) error {
 // supported methods. Propagates any AuthKitError from the manager (e.g. one
 // carrying a WWW-Authenticate header); wraps unexpected errors as server_error.
 func (f *Flow) authenticateClient(r *requests.TokenRequest) error {
-	cl, err := f.clientMgr.Authenticate(r.Request, f.supportedClientAuthMethods, EndpointToken)
+	cl, err := f.clientMgr.Authenticate(r.Request.Context(), r.Request, f.supportedClientAuthMethods, EndpointToken)
 	if err != nil {
 		return err
 	}

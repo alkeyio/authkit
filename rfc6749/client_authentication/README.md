@@ -1,16 +1,18 @@
 # client_authentication — Client Authentication
 
-Package `clientauth` implements client authentication for the OAuth 2.0 token endpoint as defined in [RFC 6749 §2.3](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3).
+Package `clientauth` implements client authentication for the OAuth 2.0 token endpoint as defined
+in [RFC 6749 §2.3](https://datatracker.ietf.org/doc/html/rfc6749#section-2.3).
 
-It provides a `Manager` that dispatches authentication to pluggable `Handler` implementations, one per supported authentication method.
+It provides a `Manager` that dispatches authentication to pluggable `Handler` implementations, one per supported
+authentication method.
 
 ## Supported Methods
 
-| Method                | Handler              | Credentials location                                    |
-|-----------------------|----------------------|---------------------------------------------------------|
-| `client_secret_basic` | `BasicAuthHandler`   | `Authorization: Basic <base64(client_id:secret)>`       |
-| `client_secret_post`  | `PostAuthHandler`    | POST body: `client_id` + `client_secret`                |
-| `none`                | `NoneAuthHandler`    | POST body: `client_id` only (public clients, no secret) |
+| Method                | Handler            | Credentials location                                    |
+|-----------------------|--------------------|---------------------------------------------------------|
+| `client_secret_basic` | `BasicAuthHandler` | `Authorization: Basic <base64(client_id:secret)>`       |
+| `client_secret_post`  | `PostAuthHandler`  | POST body: `client_id` + `client_secret`                |
+| `none`                | `NoneAuthHandler`  | POST body: `client_id` only (public clients, no secret) |
 
 ## Setup
 
@@ -33,9 +35,12 @@ cfg := authorizationcode.NewConfig().
 
 ## How Authentication Works
 
-`Manager.Authenticate` iterates over the methods permitted by the grant flow (`supportedMethods`). For each method, it calls the registered handler. The first handler that returns a valid client whose `token_endpoint_auth_method` matches the attempted method wins.
+`Manager.Authenticate` iterates over the methods permitted by the grant flow (`supportedMethods`). For each method, it
+calls the registered handler. The first handler that returns a valid client whose `token_endpoint_auth_method` matches
+the attempted method wins.
 
-If no handler succeeds, `invalid_client` is returned. When `client_secret_basic` is among the supported methods, the response carries HTTP 401 with a `WWW-Authenticate` header as required by RFC 6749 §5.2.
+If no handler succeeds, `invalid_client` is returned. When `client_secret_basic` is among the supported methods, the
+response carries HTTP 401 with a `WWW-Authenticate` header as required by RFC 6749 §5.2.
 
 ## Handlers
 
@@ -52,6 +57,7 @@ h, err := clientauth.MustBasicAuthHandler(store)
 ```
 
 Authentication steps:
+
 1. Parse `Authorization: Basic <base64(client_id:client_secret)>`.
 2. Look up client by `client_id`.
 3. Verify `client_secret` via `client.CheckClientSecret`.
@@ -67,6 +73,7 @@ h, err := clientauth.MustPostAuthHandler(store)
 ```
 
 Authentication steps:
+
 1. Verify method is POST and content type is `application/x-www-form-urlencoded`.
 2. Read `client_id` and `client_secret` from the form body.
 3. Look up client by `client_id`.
@@ -83,6 +90,7 @@ h, err := clientauth.MustNoneAuthHandler(store)
 ```
 
 Authentication steps:
+
 1. Verify method is POST and content type is `application/x-www-form-urlencoded`.
 2. Read `client_id` from the form body.
 3. Look up client by `client_id`.
@@ -101,7 +109,8 @@ Return `(nil, nil)` when the client does not exist. The handler will map it to `
 
 ## Custom Handler
 
-Register any type that implements the `Handler` interface to support additional authentication methods (e.g. `private_key_jwt`, mTLS):
+Register any type that implements the `Handler` interface to support additional authentication methods (e.g.
+`private_key_jwt`, mTLS):
 
 ```go
 type Handler interface {
@@ -116,5 +125,7 @@ Registering a handler for an already-registered method replaces the previous one
 
 ## Security Notes
 
-- All handlers return the generic `ErrInvalidClient` error on failure, regardless of which check failed, to avoid leaking whether the `client_id` exists or whether the secret was wrong.
-- `BasicAuthHandler` triggers HTTP 401 with `WWW-Authenticate: Basic` when authentication fails, as required by RFC 6749 §5.2.
+- All handlers return the generic `ErrInvalidClient` error on failure, regardless of which check failed, to avoid
+  leaking whether the `client_id` exists or whether the secret was wrong.
+- `BasicAuthHandler` triggers HTTP 401 with `WWW-Authenticate: Basic` when authentication fails, as required by RFC 6749
+  §5.2.

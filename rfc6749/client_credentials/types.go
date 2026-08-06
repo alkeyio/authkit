@@ -14,7 +14,7 @@ import (
 type ClientManager interface {
 	// Authenticate validates the client credentials carried in the request using
 	// one of the permitted authMethods. Returns the authenticated client or an error.
-	Authenticate(r *http.Request, supportedMethods map[types.ClientAuthMethod]bool, endpoint string) (models.Client, error)
+	Authenticate(ctx context.Context, r *http.Request, supportedMethods map[types.ClientAuthMethod]bool, endpoint string) (models.Client, error)
 }
 
 // TokenManager generates and persists access (and optionally refresh) tokens.
@@ -34,12 +34,12 @@ type TokenManager interface {
 // TokenRequestValidator is an extension hook called during ValidateTokenRequest,
 // after the built-in checks pass.
 type TokenRequestValidator interface {
-	ValidateTokenRequest(r *requests.TokenRequest) error
+	ValidateTokenRequest(ctx context.Context, r *requests.TokenRequest) error
 }
 
 // TokenProcessor is an extension hook called after the token is generated and
 // before the response is written. Use it to add extra fields to the token
 // response (e.g. attaching a custom claim).
 type TokenProcessor interface {
-	ProcessToken(r *requests.TokenRequest, token models.TokenReader, data map[string]interface{}) error
+	ProcessToken(ctx context.Context, r *requests.TokenRequest, token models.TokenReader, data map[string]interface{}) error
 }

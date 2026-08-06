@@ -43,7 +43,7 @@ func Must(cfg *Config) (*Flow, error) {
 
 // ValidateAuthorizationRequest validates OIDC-specific parameters in the
 // /authorize request. It is a no-op when the openid scope is absent.
-func (f *Flow) ValidateAuthorizationRequest(r *requests.AuthorizationRequest) error {
+func (f *Flow) ValidateAuthorizationRequest(_ context.Context, r *requests.AuthorizationRequest) error {
 	if isOIDCReq := r.Scopes.ContainOpenID(); !isOIDCReq {
 		return nil
 	}
@@ -59,7 +59,7 @@ func (f *Flow) ValidateAuthorizationRequest(r *requests.AuthorizationRequest) er
 // It is a no-op when the openid scope is absent. When prompt is absent and
 // user is nil, defaults to prompt=login so the handler can redirect to the
 // login page.
-func (f *Flow) ValidateConsentRequest(r *requests.AuthorizationRequest) error {
+func (f *Flow) ValidateConsentRequest(_ context.Context, r *requests.AuthorizationRequest) error {
 	if isOIDCReq := r.Scopes.ContainOpenID(); !isOIDCReq {
 		return nil
 	}
@@ -94,7 +94,7 @@ func (f *Flow) ValidateConsentRequest(r *requests.AuthorizationRequest) error {
 
 // ProcessAuthorizationCode stores the nonce from the authorization request
 // into the authorization code before it is persisted.
-func (f *Flow) ProcessAuthorizationCode(r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{}) error {
+func (f *Flow) ProcessAuthorizationCode(_ context.Context, r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{}) error {
 	if utils.IsNil(authCode) {
 		return ErrNilAuthorizationCode
 	}

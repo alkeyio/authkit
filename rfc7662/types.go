@@ -14,7 +14,7 @@ type ClientManager interface {
 	// Authenticate verifies the client credentials and returns the authenticated
 	// client. endpointName identifies the endpoint being accessed (used for
 	// method-specific logic in multi-endpoint setups).
-	Authenticate(r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string) (models.Client, error)
+	Authenticate(ctx context.Context, r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string) (models.Client, error)
 
 	// CheckPermission reports whether client is allowed to introspect token.
 	// Return false to respond with access_denied.

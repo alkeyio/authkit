@@ -65,7 +65,7 @@ func (f *Flow) ValidateTokenRequest(r *requests.TokenRequest) error {
 	}
 
 	for _, h := range f.tokenReqValidators {
-		if err := h.ValidateTokenRequest(r); err != nil {
+		if err := h.ValidateTokenRequest(r.Request.Context(), r); err != nil {
 			return err
 		}
 	}
@@ -83,7 +83,7 @@ func (f *Flow) TokenResponse(r *requests.TokenRequest, rw http.ResponseWriter) e
 
 	data := f.StandardTokenData(token)
 	for _, h := range f.tokenProcessors {
-		if err = h.ProcessToken(r, token, data); err != nil {
+		if err = h.ProcessToken(r.Request.Context(), r, token, data); err != nil {
 			return err
 		}
 	}
@@ -146,7 +146,7 @@ func (f *Flow) validateGrantType(r *requests.TokenRequest) error {
 // client is permitted to use the password grant. Returns unauthorized_client if
 // the grant type is not enabled.
 func (f *Flow) authenticateClient(r *requests.TokenRequest) error {
-	client, err := f.clientMgr.Authenticate(r.Request, f.supportedClientAuthMethods, EndpointToken)
+	client, err := f.clientMgr.Authenticate(r.Request.Context(), r.Request, f.supportedClientAuthMethods, EndpointToken)
 	if err != nil {
 		return err
 	}
@@ -195,7 +195,7 @@ func (f *Flow) validateScope(r *requests.TokenRequest) error {
 // (RFC 6749 §4.3.2). Errors from the manager are returned as-is; the
 // UserManager implementation is responsible for not leaking internal details.
 func (f *Flow) authenticateUser(r *requests.TokenRequest) error {
-	user, err := f.userMgr.Authenticate(r.Username, r.Password, r.Client, r.Request)
+	user, err := f.userMgr.Authenticate(r.Request.Context(), r.Username, r.Password, r.Client, r.Request)
 	if err != nil {
 		return err
 	}

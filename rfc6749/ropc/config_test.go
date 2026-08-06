@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/alkeyio/authkit/mocks/rfc6749/ropc"
 	"github.com/alkeyio/authkit/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewConfig(t *testing.T) {

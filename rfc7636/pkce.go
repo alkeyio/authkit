@@ -1,6 +1,8 @@
 package rfc7636
 
 import (
+	"context"
+
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/models"
 	"github.com/alkeyio/authkit/requests"
@@ -29,7 +31,7 @@ func New(opts ...*Options) *ProofKeyForCodeExchangeFlow {
 // authorization request are well-formed. It is a no-op when neither
 // code_challenge nor code_challenge_method is present, unless PKCE is required
 // for the requesting client (RFC 7636 §4.4.1).
-func (f *ProofKeyForCodeExchangeFlow) ValidateAuthorizationRequest(r *requests.AuthorizationRequest) error {
+func (f *ProofKeyForCodeExchangeFlow) ValidateAuthorizationRequest(_ context.Context, r *requests.AuthorizationRequest) error {
 	// RFC 7636 §4.4.1: if PKCE is required and the client is public (none auth
 	// method), code_challenge MUST be present in the authorization request.
 	if f.required && !utils.IsNil(r.Client) && r.Client.IsPublic() && r.CodeChallenge == "" {
@@ -72,7 +74,7 @@ func (f *ProofKeyForCodeExchangeFlow) ValidateAuthorizationRequest(r *requests.A
 
 // ValidateTokenRequest verifies the code_verifier against the stored
 // code_challenge. It enforces PKCE for public clients when required is true.
-func (f *ProofKeyForCodeExchangeFlow) ValidateTokenRequest(r *requests.TokenRequest) error {
+func (f *ProofKeyForCodeExchangeFlow) ValidateTokenRequest(_ context.Context, r *requests.TokenRequest) error {
 	if f.required && !utils.IsNil(r.Client) && r.Client.IsPublic() && r.CodeVerifier == "" {
 		return autherrors.InvalidRequestError().WithDescription("missing \"code_verifier\" in request")
 	}
@@ -121,7 +123,7 @@ func (f *ProofKeyForCodeExchangeFlow) ValidateTokenRequest(r *requests.TokenRequ
 // method is stored explicitly as "plain" per RFC 7636 §4.3. Storing an
 // explicit value prevents a silent downgrade at token validation time if the
 // stored method were ever missing.
-func (f *ProofKeyForCodeExchangeFlow) ProcessAuthorizationCode(r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]any) error {
+func (f *ProofKeyForCodeExchangeFlow) ProcessAuthorizationCode(_ context.Context, r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]any) error {
 	if utils.IsNil(authCode) {
 		return autherrors.InvalidRequestError().WithDescription("missing authorization code")
 	}

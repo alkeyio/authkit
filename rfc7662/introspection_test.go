@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/integrations/sql"
 	"github.com/alkeyio/authkit/mocks/rfc7662"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestTokenIntrospectionFlow_EndpointResponse(t *testing.T) {
@@ -40,7 +40,7 @@ func TestTokenIntrospectionFlow_EndpointResponse(t *testing.T) {
 	cfg.SetTokenManager(mockTokenMgr)
 
 	mockClientMgr := rfc7662.NewMockClientManager(t)
-	mockClientMgr.On("Authenticate", mock.AnythingOfType("*http.Request"), mock.AnythingOfType("map[types.ClientAuthMethod]bool"), mock.AnythingOfType("string")).Return(mockClient, nil).Once()
+	mockClientMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("*http.Request"), mock.AnythingOfType("map[types.ClientAuthMethod]bool"), mock.AnythingOfType("string")).Return(mockClient, nil).Once()
 	mockClientMgr.On("CheckPermission", mock.Anything, mock.Anything, mock.AnythingOfType("*http.Request")).Return(true).Once()
 	cfg.SetClientManager(mockClientMgr)
 

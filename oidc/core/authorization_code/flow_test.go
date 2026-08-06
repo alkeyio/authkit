@@ -1,6 +1,7 @@
 package authorizationcode
 
 import (
+	"context"
 	"errors"
 	"net/http/httptest"
 	"testing"
@@ -93,12 +94,12 @@ func TestFlow_ValidateAuthorizationRequest(t *testing.T) {
 
 	t.Run("non_oidc_scope_skips", func(t *testing.T) {
 		r := authReq("profile")
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("nonce_required_missing_returns_error", func(t *testing.T) {
 		r := authReq("openid")
-		err := f.ValidateAuthorizationRequest(r)
+		err := f.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "nonce")
 	})
@@ -106,7 +107,7 @@ func TestFlow_ValidateAuthorizationRequest(t *testing.T) {
 	t.Run("nonce_not_required_no_nonce_ok", func(t *testing.T) {
 		f2 := New(validConfig().SetRequireNonce(false))
 		r := authReq("openid")
-		assert.NoError(t, f2.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f2.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("nonce_already_used_returns_error", func(t *testing.T) {
@@ -116,7 +117,7 @@ func TestFlow_ValidateAuthorizationRequest(t *testing.T) {
 		f2 := New(validConfig().SetExistNonce(existNonce.Execute))
 		r := authReq("openid")
 		r.Nonce = "my-nonce"
-		err := f2.ValidateAuthorizationRequest(r)
+		err := f2.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "nonce")
 	})
@@ -128,13 +129,13 @@ func TestFlow_ValidateAuthorizationRequest(t *testing.T) {
 		f2 := New(validConfig().SetExistNonce(existNonce.Execute))
 		r := authReq("openid")
 		r.Nonce = "my-nonce"
-		assert.NoError(t, f2.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f2.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("valid_request_with_nonce", func(t *testing.T) {
 		r := authReq("openid", "profile")
 		r.Nonce = "nonce-1"
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 }
 
@@ -146,7 +147,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 	t.Run("non_oidc_scope_skips", func(t *testing.T) {
 		f := New(cfg)
 		r := authReq("profile")
-		assert.NoError(t, f.ValidateConsentRequest(r))
+		assert.NoError(t, f.ValidateConsentRequest(context.Background(), r))
 	})
 
 	t.Run("nil_user_no_prompts_defaults_to_login", func(t *testing.T) {
@@ -154,7 +155,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 		r := authReq("openid")
 		// No prompts, nil user — should default to [login] and return nil
 		// so the handler can redirect to the login page.
-		err := f.ValidateConsentRequest(r)
+		err := f.ValidateConsentRequest(context.Background(), r)
 		require.NoError(t, err)
 		assert.Equal(t, types.Prompts{types.PromptLogin}, r.Prompts)
 	})
@@ -163,14 +164,14 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 		f := New(cfg)
 		r := authReq("openid")
 		r.Prompts = types.NewPrompts([]string{"login"})
-		assert.NoError(t, f.ValidateConsentRequest(r))
+		assert.NoError(t, f.ValidateConsentRequest(context.Background(), r))
 	})
 
 	t.Run("nil_user_prompt_none_returns_login_required", func(t *testing.T) {
 		f := New(cfg)
 		r := authReq("openid")
 		r.Prompts = types.NewPrompts([]string{"none"})
-		err := f.ValidateConsentRequest(r)
+		err := f.ValidateConsentRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "login_required")
 	})
@@ -179,7 +180,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 		f := New(cfg)
 		r := authReq("openid")
 		r.Prompts = types.NewPrompts([]string{"consent"})
-		err := f.ValidateConsentRequest(r)
+		err := f.ValidateConsentRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "consent_required")
 	})
@@ -188,7 +189,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 		f := New(cfg)
 		r := authReq("openid")
 		r.Prompts = types.NewPrompts([]string{"select_account"})
-		err := f.ValidateConsentRequest(r)
+		err := f.ValidateConsentRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "account_selection_required")
 	})
@@ -197,14 +198,14 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 		f := New(cfg)
 		r := authReq("openid")
 		r.User = &sql.User{UserID: "user-1"}
-		assert.NoError(t, f.ValidateConsentRequest(r))
+		assert.NoError(t, f.ValidateConsentRequest(context.Background(), r))
 	})
 
 	t.Run("prompt_none_combined_with_other_returns_error", func(t *testing.T) {
 		f := New(cfg)
 		r := authReq("openid")
 		r.Prompts = types.NewPrompts([]string{"none", "login"})
-		err := f.ValidateConsentRequest(r)
+		err := f.ValidateConsentRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "none")
 	})
@@ -214,7 +215,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 		r := authReq("openid")
 		r.User = &sql.User{UserID: "user-1"}
 		r.Prompts = types.NewPrompts([]string{"login"})
-		require.NoError(t, f.ValidateConsentRequest(r))
+		require.NoError(t, f.ValidateConsentRequest(context.Background(), r))
 		require.NotNil(t, r.MaxAge)
 		assert.Equal(t, uint(0), *r.MaxAge)
 	})
@@ -225,21 +226,21 @@ func TestFlow_ProcessAuthorizationCode(t *testing.T) {
 	r := authReq("openid")
 
 	t.Run("nil_auth_code_returns_error", func(t *testing.T) {
-		err := f.ProcessAuthorizationCode(r, nil, nil)
+		err := f.ProcessAuthorizationCode(context.Background(), r, nil, nil)
 		assert.ErrorIs(t, err, ErrNilAuthorizationCode)
 	})
 
 	t.Run("stores_nonce_from_request", func(t *testing.T) {
 		r.Nonce = "my-nonce"
 		authCode := &sql.AuthorizationCode{}
-		require.NoError(t, f.ProcessAuthorizationCode(r, authCode, nil))
+		require.NoError(t, f.ProcessAuthorizationCode(context.Background(), r, authCode, nil))
 		assert.Equal(t, "my-nonce", authCode.GetNonce())
 	})
 
 	t.Run("empty_nonce_stored_as_empty", func(t *testing.T) {
 		r.Nonce = ""
 		authCode := &sql.AuthorizationCode{}
-		require.NoError(t, f.ProcessAuthorizationCode(r, authCode, nil))
+		require.NoError(t, f.ProcessAuthorizationCode(context.Background(), r, authCode, nil))
 		assert.Equal(t, "", authCode.GetNonce())
 	})
 }

@@ -1,8 +1,11 @@
 # ropc — Resource Owner Password Credentials Grant
 
-Package `ropc` implements the [RFC 6749 §4.3 Resource Owner Password Credentials Grant](https://datatracker.ietf.org/doc/html/rfc6749#section-4.3).
+Package `ropc` implements
+the [RFC 6749 §4.3 Resource Owner Password Credentials Grant](https://datatracker.ietf.org/doc/html/rfc6749#section-4.3).
 
-> **Warning:** ROPC is a legacy grant type. It requires the client to handle the user's credentials directly, which defeats many of the security benefits of OAuth 2.0. Use the Authorization Code + PKCE flow for new integrations whenever possible. ROPC is prohibited by [RFC 9700](https://datatracker.ietf.org/doc/html/rfc9700).
+> **Warning:** ROPC is a legacy grant type. It requires the client to handle the user's credentials directly, which
+> defeats many of the security benefits of OAuth 2.0. Use the Authorization Code + PKCE flow for new integrations whenever
+> possible. ROPC is prohibited by [RFC 9700](https://datatracker.ietf.org/doc/html/rfc9700).
 
 ## How It Works
 
@@ -29,7 +32,8 @@ Package `ropc` implements the [RFC 6749 §4.3 Resource Owner Password Credential
 **Steps:**
 
 1. **Client** collects `username` and `password` directly from the resource owner.
-2. **Client** sends a single POST request to `/token` with `grant_type=password`, credentials, and client authentication.
+2. **Client** sends a single POST request to `/token` with `grant_type=password`, credentials, and client
+   authentication.
 3. **Server** authenticates the client application.
 4. **Server** authenticates the resource owner by verifying `username` and `password`.
 5. **Server** intersects the requested `scope` with the client's allowed scopes.
@@ -56,11 +60,11 @@ server.RegisterGrant(flow)
 
 ## Required Managers
 
-| Manager         | Interface       | Responsibility                                                      |
-|-----------------|-----------------|---------------------------------------------------------------------|
-| `ClientManager` | `ClientManager` | Authenticate the client application at the token endpoint.          |
-| `UserManager`   | `UserManager`   | Verify the resource owner's `username` and `password`.              |
-| `TokenManager`  | `TokenManager`  | Generate and persist access and refresh tokens.                     |
+| Manager         | Interface       | Responsibility                                             |
+|-----------------|-----------------|------------------------------------------------------------|
+| `ClientManager` | `ClientManager` | Authenticate the client application at the token endpoint. |
+| `UserManager`   | `UserManager`   | Verify the resource owner's `username` and `password`.     |
+| `TokenManager`  | `TokenManager`  | Generate and persist access and refresh tokens.            |
 
 ### `ClientManager` interface
 
@@ -70,7 +74,8 @@ type ClientManager interface {
 }
 ```
 
-Typically backed by `clientauth.Manager` from `rfc6749/client_authentication`. Returns an error if the client fails to authenticate.
+Typically backed by `clientauth.Manager` from `rfc6749/client_authentication`. Returns an error if the client fails to
+authenticate.
 
 ### `UserManager` interface
 
@@ -80,7 +85,8 @@ type UserManager interface {
 }
 ```
 
-Return `(nil, nil)` when credentials are invalid. The flow maps this to a generic `invalid_grant` response to avoid leaking whether the username exists.
+Return `(nil, nil)` when credentials are invalid. The flow maps this to a generic `invalid_grant` response to avoid
+leaking whether the username exists.
 
 ### `TokenManager` interface
 
@@ -92,37 +98,38 @@ type TokenManager interface {
 }
 ```
 
-Typically backed by `rfc6750.BearerTokenGenerator`. A refresh token is only generated when `includeRefreshToken` is `true` (i.e. the client has the `refresh_token` grant type registered).
+Typically backed by `rfc6750.BearerTokenGenerator`. A refresh token is only generated when `includeRefreshToken` is
+`true` (i.e. the client has the `refresh_token` grant type registered).
 
 ## Extension System
 
-| Interface               | Called in              | Use case                                          |
-|-------------------------|------------------------|---------------------------------------------------|
-| `TokenRequestValidator` | `ValidateTokenRequest` | Extra `/token` validation after built-in checks.  |
-| `TokenProcessor`        | `TokenResponse`        | Add extra fields to the token response.           |
+| Interface               | Called in              | Use case                                         |
+|-------------------------|------------------------|--------------------------------------------------|
+| `TokenRequestValidator` | `ValidateTokenRequest` | Extra `/token` validation after built-in checks. |
+| `TokenProcessor`        | `TokenResponse`        | Add extra fields to the token response.          |
 
 Extensions are registered via `cfg.RegisterExtension(ext)` and executed in registration order.
 
 ## Config Options
 
-| Method                             | Default                    | Description                                               |
-|------------------------------------|----------------------------|-----------------------------------------------------------|
-| `SetClientManager(mgr)`            | —                          | Required. Client authentication.                          |
-| `SetUserManager(mgr)`              | —                          | Required. Resource owner credential verification.         |
-| `SetTokenManager(mgr)`             | —                          | Required. Token generation and persistence.               |
-| `SetTokenEndpointHttpMethods(m)`   | `[POST]`                   | HTTP methods accepted at `/token`.                        |
-| `SetSupportedClientAuthMethods(m)` | `client_secret_basic`      | Client authentication methods accepted at `/token`.       |
-| `SetOmittedScopePolicy(p)`         | `OmittedScopePolicyReject` | Behavior when the client omits the `scope` parameter.     |
-| `RegisterExtension(ext)`           | —                          | Register one or more extension hooks.                     |
+| Method                             | Default                    | Description                                           |
+|------------------------------------|----------------------------|-------------------------------------------------------|
+| `SetClientManager(mgr)`            | —                          | Required. Client authentication.                      |
+| `SetUserManager(mgr)`              | —                          | Required. Resource owner credential verification.     |
+| `SetTokenManager(mgr)`             | —                          | Required. Token generation and persistence.           |
+| `SetTokenEndpointHttpMethods(m)`   | `[POST]`                   | HTTP methods accepted at `/token`.                    |
+| `SetSupportedClientAuthMethods(m)` | `client_secret_basic`      | Client authentication methods accepted at `/token`.   |
+| `SetOmittedScopePolicy(p)`         | `OmittedScopePolicyReject` | Behavior when the client omits the `scope` parameter. |
+| `RegisterExtension(ext)`           | —                          | Register one or more extension hooks.                 |
 
 ### Omitted Scope Policy
 
 Controls what happens when the client does not include a `scope` parameter (RFC 6749 §3.3):
 
-| Policy                               | Behavior                                                    |
-|--------------------------------------|-------------------------------------------------------------|
-| `OmittedScopePolicyReject`           | Reject with `invalid_scope`. This is the default.           |
-| `OmittedScopePolicyUseClientDefault` | Grant the client's full registered scope list.              |
+| Policy                               | Behavior                                          |
+|--------------------------------------|---------------------------------------------------|
+| `OmittedScopePolicyReject`           | Reject with `invalid_scope`. This is the default. |
+| `OmittedScopePolicyUseClientDefault` | Grant the client's full registered scope list.    |
 
 ```go
 cfg.SetOmittedScopePolicy(ropc.OmittedScopePolicyUseClientDefault)
@@ -135,7 +142,8 @@ cfg.SetOmittedScopePolicy(ropc.OmittedScopePolicyUseClientDefault)
 - `username` and `password` must be present in the request.
 - Client must authenticate successfully using a supported method.
 - Client must have `grant_type=password` explicitly registered; otherwise `unauthorized_client` is returned.
-- When `scope` is present, it is intersected with the client's allowed scopes. If the intersection is empty, `invalid_scope` is returned.
+- When `scope` is present, it is intersected with the client's allowed scopes. If the intersection is empty,
+  `invalid_scope` is returned.
 - When `scope` is absent, behavior is determined by `OmittedScopePolicy` (default: reject with `invalid_scope`).
 - If `UserManager.Authenticate` returns `nil`, `invalid_grant` is returned with a generic message.
 - A refresh token is included only if the client has the `refresh_token` grant type registered.
@@ -144,4 +152,5 @@ cfg.SetOmittedScopePolicy(ropc.OmittedScopePolicyUseClientDefault)
 
 - Username/password are transmitted in plaintext in the POST body — TLS is mandatory.
 - A generic `"Username or password is incorrect"` message is returned on credential failure to avoid user enumeration.
-- Prefer the Authorization Code + PKCE flow for all new integrations. ROPC should only be used for migrating legacy systems where other flows are not feasible.
+- Prefer the Authorization Code + PKCE flow for all new integrations. ROPC should only be used for migrating legacy
+  systems where other flows are not feasible.

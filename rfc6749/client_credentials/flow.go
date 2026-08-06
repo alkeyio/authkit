@@ -70,7 +70,7 @@ func (f *Flow) ValidateTokenRequest(r *requests.TokenRequest) error {
 	}
 
 	for _, h := range f.tokenReqValidators {
-		if err := h.ValidateTokenRequest(r); err != nil {
+		if err := h.ValidateTokenRequest(r.Request.Context(), r); err != nil {
 			return err
 		}
 	}
@@ -89,7 +89,7 @@ func (f *Flow) TokenResponse(r *requests.TokenRequest, rw http.ResponseWriter) e
 
 	data := f.StandardTokenData(token)
 	for _, h := range f.tokenProcessors {
-		if err = h.ProcessToken(r, token, data); err != nil {
+		if err = h.ProcessToken(r.Request.Context(), r, token, data); err != nil {
 			return err
 		}
 	}
@@ -129,7 +129,7 @@ func (f *Flow) validateGrantType(r *requests.TokenRequest) error {
 // authenticateClient delegates to ClientManager.Authenticate, then verifies the
 // client is confidential and permitted to use the "client_credentials" grant.
 func (f *Flow) authenticateClient(r *requests.TokenRequest) error {
-	client, err := f.clientMgr.Authenticate(r.Request, f.supportedClientAuthMethods, EndpointToken)
+	client, err := f.clientMgr.Authenticate(r.Request.Context(), r.Request, f.supportedClientAuthMethods, EndpointToken)
 	if err != nil {
 		return err
 	}

@@ -6,13 +6,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/alkeyio/authkit/integrations/sql"
 	"github.com/alkeyio/authkit/mocks/rfc6749/ropc"
 	"github.com/alkeyio/authkit/requests"
 	"github.com/alkeyio/authkit/types"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestFlow_Must(t *testing.T) {
@@ -116,7 +116,7 @@ func TestFlow_TokenResponse_WithProcessor(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
 		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
-		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
+		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
 		err := f.TokenResponse(r, httptest.NewRecorder())
@@ -127,7 +127,7 @@ func TestFlow_TokenResponse_WithProcessor(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
 		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
-		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything).Return(errors.New("processor error")).Once()
+		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(errors.New("processor error")).Once()
 
 		err := f.TokenResponse(r, httptest.NewRecorder())
 		assert.Error(t, err)
@@ -257,7 +257,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 		mockClient := &sql.Client{
 			GrantTypes: []string{types.GrantTypeROPC.String()},
 		}
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(mockClient, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(mockClient, nil).Once()
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
 		}
@@ -269,7 +269,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 	})
 
 	t.Run("error_when_client_not_found", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, nil).Once()
 
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
@@ -282,7 +282,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 	})
 
 	t.Run("error_when_store_returns_error", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, errors.New("unexpected")).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, errors.New("unexpected")).Once()
 
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
@@ -298,7 +298,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 		mockClient := &sql.Client{
 			GrantTypes: []string{},
 		}
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(mockClient, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(mockClient, nil).Once()
 
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
@@ -317,7 +317,7 @@ func TestFlow_authenticateUser(t *testing.T) {
 	f := New(NewConfig().SetUserManager(mockUserMgr))
 
 	t.Run("success", func(t *testing.T) {
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(mockUser, nil).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(mockUser, nil).Once()
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
 		}
@@ -330,7 +330,7 @@ func TestFlow_authenticateUser(t *testing.T) {
 	})
 
 	t.Run("error_when_user_not_found", func(t *testing.T) {
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(nil, nil).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(nil, nil).Once()
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
 		}
@@ -343,7 +343,7 @@ func TestFlow_authenticateUser(t *testing.T) {
 	})
 
 	t.Run("error_when_store_returns_error", func(t *testing.T) {
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(nil, errors.New("unexpected")).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(nil, errors.New("unexpected")).Once()
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
 		}
@@ -424,8 +424,8 @@ func TestFlow_ValidateTokenRequest(t *testing.T) {
 	}
 
 	t.Run("success", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(&sql.User{}, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(&sql.User{}, nil).Once()
 
 		r := &requests.TokenRequest{
 			Request:   httptest.NewRequest(http.MethodPost, "/oauth/token", nil),
@@ -454,7 +454,7 @@ func TestFlow_ValidateTokenRequest(t *testing.T) {
 	})
 
 	t.Run("error_when_client_auth_fails", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(nil, nil).Once()
 
 		r := &requests.TokenRequest{
 			Request:   httptest.NewRequest(http.MethodPost, "/oauth/token", nil),
@@ -470,7 +470,7 @@ func TestFlow_ValidateTokenRequest(t *testing.T) {
 	})
 
 	t.Run("error_when_scope_invalid", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
 
 		r := &requests.TokenRequest{
 			Request:   httptest.NewRequest(http.MethodPost, "/oauth/token", nil),
@@ -487,8 +487,8 @@ func TestFlow_ValidateTokenRequest(t *testing.T) {
 	})
 
 	t.Run("error_when_user_auth_fails", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(nil, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(nil, nil).Once()
 
 		r := &requests.TokenRequest{
 			Request:   httptest.NewRequest(http.MethodPost, "/oauth/token", nil),
@@ -515,9 +515,9 @@ func TestFlow_ValidateTokenRequest_WithExtension(t *testing.T) {
 	validClient := &sql.Client{GrantTypes: []string{types.GrantTypeROPC.String()}, Scopes: []string{"read"}}
 
 	t.Run("success_validator_called", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(&sql.User{}, nil).Once()
-		mockValidator.On("ValidateTokenRequest", mock.Anything).Return(nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(&sql.User{}, nil).Once()
+		mockValidator.On("ValidateTokenRequest", mock.Anything, mock.Anything).Return(nil).Once()
 
 		r := &requests.TokenRequest{
 			Request:   httptest.NewRequest(http.MethodPost, "/oauth/token", nil),
@@ -535,9 +535,9 @@ func TestFlow_ValidateTokenRequest_WithExtension(t *testing.T) {
 	})
 
 	t.Run("error_when_validator_fails", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
-		mockUserMgr.On("Authenticate", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(&sql.User{}, nil).Once()
-		mockValidator.On("ValidateTokenRequest", mock.Anything).Return(errors.New("validator error")).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(validClient, nil).Once()
+		mockUserMgr.On("Authenticate", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.Anything, mock.Anything).Return(&sql.User{}, nil).Once()
+		mockValidator.On("ValidateTokenRequest", mock.Anything, mock.Anything).Return(errors.New("validator error")).Once()
 
 		r := &requests.TokenRequest{
 			Request:   httptest.NewRequest(http.MethodPost, "/oauth/token", nil),

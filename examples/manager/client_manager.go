@@ -60,8 +60,8 @@ func (m *ClientManager) QueryByClientID(_ context.Context, id string) (authkitmo
 }
 
 // Authenticate validates the client credentials in the request using the registered auth handlers.
-func (m *ClientManager) Authenticate(r *http.Request, authMethods map[authkittypes.ClientAuthMethod]bool, endpointName string) (authkitmodels.Client, error) {
-	return m.mgr.Authenticate(r, authMethods, endpointName)
+func (m *ClientManager) Authenticate(ctx context.Context, r *http.Request, authMethods map[authkittypes.ClientAuthMethod]bool, endpointName string) (authkitmodels.Client, error) {
+	return m.mgr.Authenticate(ctx, r, authMethods, endpointName)
 }
 
 // CheckPermission reports whether the client is permitted to introspect the given token.

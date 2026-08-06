@@ -18,7 +18,7 @@ type ClientManager interface {
 
 	// Authenticate validates the client credentials carried in the request using
 	// one of the permitted authMethods. Returns the authenticated client or an error.
-	Authenticate(r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string) (models.Client, error)
+	Authenticate(ctx context.Context, r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string) (models.Client, error)
 }
 
 // UserManager resolves the resource owner linked to an authorization code.
@@ -67,26 +67,26 @@ type TokenManager interface {
 // ValidateAuthorizationRequest, after the built-in checks pass.
 // Register with Config.RegisterExtension (e.g. PKCE, OIDC nonce validation).
 type AuthorizationRequestValidator interface {
-	ValidateAuthorizationRequest(r *requests.AuthorizationRequest) error
+	ValidateAuthorizationRequest(ctx context.Context, r *requests.AuthorizationRequest) error
 }
 
 // ConsentRequestValidator is an extension hook called during
 // ValidateConsentRequest, after the built-in checks pass.
 type ConsentRequestValidator interface {
-	ValidateConsentRequest(r *requests.AuthorizationRequest) error
+	ValidateConsentRequest(ctx context.Context, r *requests.AuthorizationRequest) error
 }
 
 // AuthCodeProcessor is an extension hook called after the authorization code is
 // generated and before it is saved. Use it to attach extra data to the code
 // (e.g. PKCE stores code_challenge) or add parameters to the redirect response.
 type AuthCodeProcessor interface {
-	ProcessAuthorizationCode(r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{}) error
+	ProcessAuthorizationCode(ctx context.Context, r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{}) error
 }
 
 // TokenRequestValidator is an extension hook called during ValidateTokenRequest,
 // after the built-in checks pass (e.g. PKCE verifies code_verifier here).
 type TokenRequestValidator interface {
-	ValidateTokenRequest(r *requests.TokenRequest) error
+	ValidateTokenRequest(ctx context.Context, r *requests.TokenRequest) error
 }
 
 // TokenProcessor is an extension hook called after the token is generated and

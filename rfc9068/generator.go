@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/models"
 	"github.com/alkeyio/authkit/requests"
 	"github.com/alkeyio/authkit/utils"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 // protectedClaims is the set of standard RFC 9068 claim names that

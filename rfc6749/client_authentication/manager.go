@@ -1,6 +1,7 @@
 package clientauth
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"sort"
@@ -31,7 +32,7 @@ func NewManager() *Manager {
 // registered auth method matches the attempted method wins.
 //
 // Returns ErrInvalidClient if no handler succeeds.
-func (m *Manager) Authenticate(r *http.Request, supportedMethods map[types.ClientAuthMethod]bool, endpoint string) (models.Client, error) {
+func (m *Manager) Authenticate(_ context.Context, r *http.Request, supportedMethods map[types.ClientAuthMethod]bool, endpoint string) (models.Client, error) {
 	for method, ok := range supportedMethods {
 		if !ok {
 			continue

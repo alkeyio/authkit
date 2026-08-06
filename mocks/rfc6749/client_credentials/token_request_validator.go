@@ -3,6 +3,8 @@
 package clientcredentials
 
 import (
+	context "context"
+
 	requests "github.com/alkeyio/authkit/requests"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -20,17 +22,17 @@ func (_m *MockTokenRequestValidator) EXPECT() *MockTokenRequestValidator_Expecte
 	return &MockTokenRequestValidator_Expecter{mock: &_m.Mock}
 }
 
-// ValidateTokenRequest provides a mock function with given fields: r
-func (_m *MockTokenRequestValidator) ValidateTokenRequest(r *requests.TokenRequest) error {
-	ret := _m.Called(r)
+// ValidateTokenRequest provides a mock function with given fields: ctx, r
+func (_m *MockTokenRequestValidator) ValidateTokenRequest(ctx context.Context, r *requests.TokenRequest) error {
+	ret := _m.Called(ctx, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ValidateTokenRequest")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*requests.TokenRequest) error); ok {
-		r0 = rf(r)
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.TokenRequest) error); ok {
+		r0 = rf(ctx, r)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -44,14 +46,15 @@ type MockTokenRequestValidator_ValidateTokenRequest_Call struct {
 }
 
 // ValidateTokenRequest is a helper method to define mock.On call
+//   - ctx context.Context
 //   - r *requests.TokenRequest
-func (_e *MockTokenRequestValidator_Expecter) ValidateTokenRequest(r interface{}) *MockTokenRequestValidator_ValidateTokenRequest_Call {
-	return &MockTokenRequestValidator_ValidateTokenRequest_Call{Call: _e.mock.On("ValidateTokenRequest", r)}
+func (_e *MockTokenRequestValidator_Expecter) ValidateTokenRequest(ctx interface{}, r interface{}) *MockTokenRequestValidator_ValidateTokenRequest_Call {
+	return &MockTokenRequestValidator_ValidateTokenRequest_Call{Call: _e.mock.On("ValidateTokenRequest", ctx, r)}
 }
 
-func (_c *MockTokenRequestValidator_ValidateTokenRequest_Call) Run(run func(r *requests.TokenRequest)) *MockTokenRequestValidator_ValidateTokenRequest_Call {
+func (_c *MockTokenRequestValidator_ValidateTokenRequest_Call) Run(run func(ctx context.Context, r *requests.TokenRequest)) *MockTokenRequestValidator_ValidateTokenRequest_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*requests.TokenRequest))
+		run(args[0].(context.Context), args[1].(*requests.TokenRequest))
 	})
 	return _c
 }
@@ -61,7 +64,7 @@ func (_c *MockTokenRequestValidator_ValidateTokenRequest_Call) Return(_a0 error)
 	return _c
 }
 
-func (_c *MockTokenRequestValidator_ValidateTokenRequest_Call) RunAndReturn(run func(*requests.TokenRequest) error) *MockTokenRequestValidator_ValidateTokenRequest_Call {
+func (_c *MockTokenRequestValidator_ValidateTokenRequest_Call) RunAndReturn(run func(context.Context, *requests.TokenRequest) error) *MockTokenRequestValidator_ValidateTokenRequest_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -7,13 +7,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"github.com/alkeyio/authkit/integrations/sql"
 	authcodemock "github.com/alkeyio/authkit/mocks/rfc6749/authorization_code"
 	"github.com/alkeyio/authkit/requests"
 	"github.com/alkeyio/authkit/types"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func newAuthReq(method string) *requests.AuthorizationRequest {
@@ -333,7 +333,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		client := validClient()
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, EndpointToken).Return(client, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, EndpointToken).Return(client, nil).Once()
 
 		r := newTokenReq()
 		err := f.authenticateClient(r)
@@ -342,7 +342,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 	})
 
 	t.Run("error_when_client_not_found", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, EndpointToken).Return(nil, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, EndpointToken).Return(nil, nil).Once()
 
 		r := newTokenReq()
 		err := f.authenticateClient(r)
@@ -351,7 +351,7 @@ func TestFlow_authenticateClient(t *testing.T) {
 	})
 
 	t.Run("error_when_store_returns_error", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, EndpointToken).Return(nil, errors.New("db error")).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, EndpointToken).Return(nil, errors.New("db error")).Once()
 
 		r := newTokenReq()
 		err := f.authenticateClient(r)
@@ -763,7 +763,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 
 	t.Run("success_calls_consent_validator", func(t *testing.T) {
 		mockClientMgr.On("QueryByClientID", mock.Anything, "client-1").Return(client, nil).Once()
-		mockConsentValidator.On("ValidateConsentRequest", mock.Anything).Return(nil).Once()
+		mockConsentValidator.On("ValidateConsentRequest", mock.Anything, mock.Anything).Return(nil).Once()
 
 		r := newAuthReq(http.MethodGet)
 		r.ClientID = "client-1"
@@ -777,7 +777,7 @@ func TestFlow_ValidateConsentRequest(t *testing.T) {
 
 	t.Run("error_when_consent_validator_returns_error", func(t *testing.T) {
 		mockClientMgr.On("QueryByClientID", mock.Anything, "client-1").Return(client, nil).Once()
-		mockConsentValidator.On("ValidateConsentRequest", mock.Anything).Return(errors.New("consent denied")).Once()
+		mockConsentValidator.On("ValidateConsentRequest", mock.Anything, mock.Anything).Return(errors.New("consent denied")).Once()
 
 		r := newAuthReq(http.MethodGet)
 		r.ClientID = "client-1"
@@ -804,7 +804,7 @@ func TestFlow_ValidateAuthorizationRequest_WithExtension(t *testing.T) {
 
 	t.Run("success_calls_extension", func(t *testing.T) {
 		mockClientMgr.On("QueryByClientID", mock.Anything, "client-1").Return(client, nil).Once()
-		mockAuthReqValidator.On("ValidateAuthorizationRequest", mock.Anything).Return(nil).Once()
+		mockAuthReqValidator.On("ValidateAuthorizationRequest", mock.Anything, mock.Anything).Return(nil).Once()
 
 		r := newAuthReq(http.MethodGet)
 		r.ClientID = "client-1"
@@ -819,7 +819,7 @@ func TestFlow_ValidateAuthorizationRequest_WithExtension(t *testing.T) {
 
 	t.Run("error_when_extension_returns_error", func(t *testing.T) {
 		mockClientMgr.On("QueryByClientID", mock.Anything, "client-1").Return(client, nil).Once()
-		mockAuthReqValidator.On("ValidateAuthorizationRequest", mock.Anything).Return(errors.New("ext error")).Once()
+		mockAuthReqValidator.On("ValidateAuthorizationRequest", mock.Anything, mock.Anything).Return(errors.New("ext error")).Once()
 
 		r := newAuthReq(http.MethodGet)
 		r.ClientID = "client-1"
@@ -853,9 +853,9 @@ func TestFlow_ValidateTokenRequest_WithExtension(t *testing.T) {
 	}
 
 	t.Run("success_calls_extension", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, EndpointToken).Return(client, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, EndpointToken).Return(client, nil).Once()
 		mockAuthCodeMgr.On("QueryByCode", mock.Anything, "code-xyz").Return(authCode, nil).Once()
-		mockTokenReqValidator.On("ValidateTokenRequest", mock.Anything).Return(nil).Once()
+		mockTokenReqValidator.On("ValidateTokenRequest", mock.Anything, mock.Anything).Return(nil).Once()
 
 		r := newTokenReq()
 		r.GrantType = types.GrantTypeAuthorizationCode
@@ -866,9 +866,9 @@ func TestFlow_ValidateTokenRequest_WithExtension(t *testing.T) {
 	})
 
 	t.Run("error_when_extension_returns_error", func(t *testing.T) {
-		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, EndpointToken).Return(client, nil).Once()
+		mockClientMgr.On("Authenticate", mock.Anything, mock.Anything, mock.Anything, EndpointToken).Return(client, nil).Once()
 		mockAuthCodeMgr.On("QueryByCode", mock.Anything, "code-xyz").Return(authCode, nil).Once()
-		mockTokenReqValidator.On("ValidateTokenRequest", mock.Anything).Return(errors.New("pkce error")).Once()
+		mockTokenReqValidator.On("ValidateTokenRequest", mock.Anything, mock.Anything).Return(errors.New("pkce error")).Once()
 
 		r := newTokenReq()
 		r.GrantType = types.GrantTypeAuthorizationCode

@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	codegen "github.com/alkeyio/authkit/mocks/rfc6749/code_generator"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewOptions(t *testing.T) {

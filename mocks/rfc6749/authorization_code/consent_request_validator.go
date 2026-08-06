@@ -3,6 +3,8 @@
 package authorizationcode
 
 import (
+	context "context"
+
 	requests "github.com/alkeyio/authkit/requests"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -20,17 +22,17 @@ func (_m *MockConsentRequestValidator) EXPECT() *MockConsentRequestValidator_Exp
 	return &MockConsentRequestValidator_Expecter{mock: &_m.Mock}
 }
 
-// ValidateConsentRequest provides a mock function with given fields: r
-func (_m *MockConsentRequestValidator) ValidateConsentRequest(r *requests.AuthorizationRequest) error {
-	ret := _m.Called(r)
+// ValidateConsentRequest provides a mock function with given fields: ctx, r
+func (_m *MockConsentRequestValidator) ValidateConsentRequest(ctx context.Context, r *requests.AuthorizationRequest) error {
+	ret := _m.Called(ctx, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ValidateConsentRequest")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*requests.AuthorizationRequest) error); ok {
-		r0 = rf(r)
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.AuthorizationRequest) error); ok {
+		r0 = rf(ctx, r)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -44,14 +46,15 @@ type MockConsentRequestValidator_ValidateConsentRequest_Call struct {
 }
 
 // ValidateConsentRequest is a helper method to define mock.On call
+//   - ctx context.Context
 //   - r *requests.AuthorizationRequest
-func (_e *MockConsentRequestValidator_Expecter) ValidateConsentRequest(r interface{}) *MockConsentRequestValidator_ValidateConsentRequest_Call {
-	return &MockConsentRequestValidator_ValidateConsentRequest_Call{Call: _e.mock.On("ValidateConsentRequest", r)}
+func (_e *MockConsentRequestValidator_Expecter) ValidateConsentRequest(ctx interface{}, r interface{}) *MockConsentRequestValidator_ValidateConsentRequest_Call {
+	return &MockConsentRequestValidator_ValidateConsentRequest_Call{Call: _e.mock.On("ValidateConsentRequest", ctx, r)}
 }
 
-func (_c *MockConsentRequestValidator_ValidateConsentRequest_Call) Run(run func(r *requests.AuthorizationRequest)) *MockConsentRequestValidator_ValidateConsentRequest_Call {
+func (_c *MockConsentRequestValidator_ValidateConsentRequest_Call) Run(run func(ctx context.Context, r *requests.AuthorizationRequest)) *MockConsentRequestValidator_ValidateConsentRequest_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*requests.AuthorizationRequest))
+		run(args[0].(context.Context), args[1].(*requests.AuthorizationRequest))
 	})
 	return _c
 }
@@ -61,7 +64,7 @@ func (_c *MockConsentRequestValidator_ValidateConsentRequest_Call) Return(_a0 er
 	return _c
 }
 
-func (_c *MockConsentRequestValidator_ValidateConsentRequest_Call) RunAndReturn(run func(*requests.AuthorizationRequest) error) *MockConsentRequestValidator_ValidateConsentRequest_Call {
+func (_c *MockConsentRequestValidator_ValidateConsentRequest_Call) RunAndReturn(run func(context.Context, *requests.AuthorizationRequest) error) *MockConsentRequestValidator_ValidateConsentRequest_Call {
 	_c.Call.Return(run)
 	return _c
 }

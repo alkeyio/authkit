@@ -80,7 +80,7 @@ func (m *UserManager) QueryUserByCode(_ context.Context, code authkitmodels.Auth
 
 // Authenticate verifies the user's credentials and returns the authenticated user.
 // Returns (nil, nil) when the credentials are invalid.
-func (m *UserManager) Authenticate(username, password string, _ authkitmodels.Client, _ *http.Request) (authkitmodels.User, error) {
+func (m *UserManager) Authenticate(_ context.Context, username, password string, _ authkitmodels.Client, _ *http.Request) (authkitmodels.User, error) {
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 

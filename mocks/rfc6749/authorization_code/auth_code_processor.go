@@ -3,6 +3,8 @@
 package authorizationcode
 
 import (
+	context "context"
+
 	models "github.com/alkeyio/authkit/models"
 	mock "github.com/stretchr/testify/mock"
 
@@ -22,17 +24,17 @@ func (_m *MockAuthCodeProcessor) EXPECT() *MockAuthCodeProcessor_Expecter {
 	return &MockAuthCodeProcessor_Expecter{mock: &_m.Mock}
 }
 
-// ProcessAuthorizationCode provides a mock function with given fields: r, authCode, params
-func (_m *MockAuthCodeProcessor) ProcessAuthorizationCode(r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{}) error {
-	ret := _m.Called(r, authCode, params)
+// ProcessAuthorizationCode provides a mock function with given fields: ctx, r, authCode, params
+func (_m *MockAuthCodeProcessor) ProcessAuthorizationCode(ctx context.Context, r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{}) error {
+	ret := _m.Called(ctx, r, authCode, params)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ProcessAuthorizationCode")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*requests.AuthorizationRequest, models.AuthorizationCode, map[string]interface{}) error); ok {
-		r0 = rf(r, authCode, params)
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.AuthorizationRequest, models.AuthorizationCode, map[string]interface{}) error); ok {
+		r0 = rf(ctx, r, authCode, params)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -46,16 +48,17 @@ type MockAuthCodeProcessor_ProcessAuthorizationCode_Call struct {
 }
 
 // ProcessAuthorizationCode is a helper method to define mock.On call
+//   - ctx context.Context
 //   - r *requests.AuthorizationRequest
 //   - authCode models.AuthorizationCode
 //   - params map[string]interface{}
-func (_e *MockAuthCodeProcessor_Expecter) ProcessAuthorizationCode(r interface{}, authCode interface{}, params interface{}) *MockAuthCodeProcessor_ProcessAuthorizationCode_Call {
-	return &MockAuthCodeProcessor_ProcessAuthorizationCode_Call{Call: _e.mock.On("ProcessAuthorizationCode", r, authCode, params)}
+func (_e *MockAuthCodeProcessor_Expecter) ProcessAuthorizationCode(ctx interface{}, r interface{}, authCode interface{}, params interface{}) *MockAuthCodeProcessor_ProcessAuthorizationCode_Call {
+	return &MockAuthCodeProcessor_ProcessAuthorizationCode_Call{Call: _e.mock.On("ProcessAuthorizationCode", ctx, r, authCode, params)}
 }
 
-func (_c *MockAuthCodeProcessor_ProcessAuthorizationCode_Call) Run(run func(r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{})) *MockAuthCodeProcessor_ProcessAuthorizationCode_Call {
+func (_c *MockAuthCodeProcessor_ProcessAuthorizationCode_Call) Run(run func(ctx context.Context, r *requests.AuthorizationRequest, authCode models.AuthorizationCode, params map[string]interface{})) *MockAuthCodeProcessor_ProcessAuthorizationCode_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*requests.AuthorizationRequest), args[1].(models.AuthorizationCode), args[2].(map[string]interface{}))
+		run(args[0].(context.Context), args[1].(*requests.AuthorizationRequest), args[2].(models.AuthorizationCode), args[3].(map[string]interface{}))
 	})
 	return _c
 }
@@ -65,7 +68,7 @@ func (_c *MockAuthCodeProcessor_ProcessAuthorizationCode_Call) Return(_a0 error)
 	return _c
 }
 
-func (_c *MockAuthCodeProcessor_ProcessAuthorizationCode_Call) RunAndReturn(run func(*requests.AuthorizationRequest, models.AuthorizationCode, map[string]interface{}) error) *MockAuthCodeProcessor_ProcessAuthorizationCode_Call {
+func (_c *MockAuthCodeProcessor_ProcessAuthorizationCode_Call) RunAndReturn(run func(context.Context, *requests.AuthorizationRequest, models.AuthorizationCode, map[string]interface{}) error) *MockAuthCodeProcessor_ProcessAuthorizationCode_Call {
 	_c.Call.Return(run)
 	return _c
 }

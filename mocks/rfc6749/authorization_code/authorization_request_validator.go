@@ -3,6 +3,8 @@
 package authorizationcode
 
 import (
+	context "context"
+
 	requests "github.com/alkeyio/authkit/requests"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -20,17 +22,17 @@ func (_m *MockAuthorizationRequestValidator) EXPECT() *MockAuthorizationRequestV
 	return &MockAuthorizationRequestValidator_Expecter{mock: &_m.Mock}
 }
 
-// ValidateAuthorizationRequest provides a mock function with given fields: r
-func (_m *MockAuthorizationRequestValidator) ValidateAuthorizationRequest(r *requests.AuthorizationRequest) error {
-	ret := _m.Called(r)
+// ValidateAuthorizationRequest provides a mock function with given fields: ctx, r
+func (_m *MockAuthorizationRequestValidator) ValidateAuthorizationRequest(ctx context.Context, r *requests.AuthorizationRequest) error {
+	ret := _m.Called(ctx, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ValidateAuthorizationRequest")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(*requests.AuthorizationRequest) error); ok {
-		r0 = rf(r)
+	if rf, ok := ret.Get(0).(func(context.Context, *requests.AuthorizationRequest) error); ok {
+		r0 = rf(ctx, r)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -44,14 +46,15 @@ type MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call struct 
 }
 
 // ValidateAuthorizationRequest is a helper method to define mock.On call
+//   - ctx context.Context
 //   - r *requests.AuthorizationRequest
-func (_e *MockAuthorizationRequestValidator_Expecter) ValidateAuthorizationRequest(r interface{}) *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call {
-	return &MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call{Call: _e.mock.On("ValidateAuthorizationRequest", r)}
+func (_e *MockAuthorizationRequestValidator_Expecter) ValidateAuthorizationRequest(ctx interface{}, r interface{}) *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call {
+	return &MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call{Call: _e.mock.On("ValidateAuthorizationRequest", ctx, r)}
 }
 
-func (_c *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call) Run(run func(r *requests.AuthorizationRequest)) *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call {
+func (_c *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call) Run(run func(ctx context.Context, r *requests.AuthorizationRequest)) *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*requests.AuthorizationRequest))
+		run(args[0].(context.Context), args[1].(*requests.AuthorizationRequest))
 	})
 	return _c
 }
@@ -61,7 +64,7 @@ func (_c *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call) R
 	return _c
 }
 
-func (_c *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call) RunAndReturn(run func(*requests.AuthorizationRequest) error) *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call {
+func (_c *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call) RunAndReturn(run func(context.Context, *requests.AuthorizationRequest) error) *MockAuthorizationRequestValidator_ValidateAuthorizationRequest_Call {
 	_c.Call.Return(run)
 	return _c
 }

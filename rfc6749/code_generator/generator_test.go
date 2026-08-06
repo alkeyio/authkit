@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/alkeyio/authkit/integrations/sql"
 	codegen "github.com/alkeyio/authkit/mocks/rfc6749/code_generator"
 	"github.com/alkeyio/authkit/requests"
 	"github.com/alkeyio/authkit/types"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestGenerator_New(t *testing.T) {

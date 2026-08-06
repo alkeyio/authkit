@@ -45,7 +45,7 @@ func (f *TokenIntrospectionFlow) CheckEndpoint(name string) bool {
 // caller, looks up the token, checks client permission, and writes the JSON
 // introspection payload (RFC 7662 §2.2) to rw.
 func (f *TokenIntrospectionFlow) EndpointResponse(r *http.Request, rw http.ResponseWriter) error {
-	client, err := f.clientManager.Authenticate(r, f.supportedClientAuthMethods, f.endpointName)
+	client, err := f.clientManager.Authenticate(r.Context(), r, f.supportedClientAuthMethods, f.endpointName)
 	if err != nil {
 		return autherrors.ToAuthKitError(err)
 	}

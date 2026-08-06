@@ -1,6 +1,7 @@
 package rfc7636
 
 import (
+	"context"
 	"strings"
 	"testing"
 
@@ -43,7 +44,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 
 	t.Run("no_pkce_params_skips", func(t *testing.T) {
 		r := &requests.AuthorizationRequest{}
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("required_public_client_missing_challenge", func(t *testing.T) {
@@ -51,7 +52,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 		r := &requests.AuthorizationRequest{
 			Client: &sql.Client{TokenEndpointAuthMethod: string(types.ClientNoneAuthentication)},
 		}
-		err := f.ValidateAuthorizationRequest(r)
+		err := f.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "this server requires public clients to use PKCE")
 	})
@@ -61,14 +62,14 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 		r := &requests.AuthorizationRequest{
 			Client: &sql.Client{TokenEndpointAuthMethod: string(types.ClientBasicAuthentication)},
 		}
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("only_method_missing_challenge", func(t *testing.T) {
 		r := &requests.AuthorizationRequest{
 			CodeChallengeMethod: types.CodeChallengeMethodS256,
 		}
-		err := f.ValidateAuthorizationRequest(r)
+		err := f.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_challenge")
 	})
@@ -78,7 +79,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 			CodeChallenge:       testChallenge,
 			CodeChallengeMethod: types.NewCodeChallengeMethod("unsupported"),
 		}
-		err := f.ValidateAuthorizationRequest(r)
+		err := f.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_challenge_method")
 	})
@@ -88,7 +89,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 			CodeChallenge:       testChallenge,
 			CodeChallengeMethod: types.CodeChallengeMethodS256,
 		}
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("valid_plain", func(t *testing.T) {
@@ -96,7 +97,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 			CodeChallenge:       testVerifier,
 			CodeChallengeMethod: types.CodeChallengeMethodPlain,
 		}
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("valid_challenge_without_method", func(t *testing.T) {
@@ -104,7 +105,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 		r := &requests.AuthorizationRequest{
 			CodeChallenge: testVerifier,
 		}
-		assert.NoError(t, f.ValidateAuthorizationRequest(r))
+		assert.NoError(t, f.ValidateAuthorizationRequest(context.Background(), r))
 	})
 
 	t.Run("invalid_s256_challenge_format", func(t *testing.T) {
@@ -112,7 +113,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 			CodeChallenge:       "not-a-valid-s256-challenge",
 			CodeChallengeMethod: types.CodeChallengeMethodS256,
 		}
-		err := f.ValidateAuthorizationRequest(r)
+		err := f.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_challenge")
 	})
@@ -122,7 +123,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 			CodeChallenge:       "too-short",
 			CodeChallengeMethod: types.CodeChallengeMethodPlain,
 		}
-		err := f.ValidateAuthorizationRequest(r)
+		err := f.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_challenge")
 	})
@@ -133,7 +134,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 			CodeChallenge:       testVerifier,
 			CodeChallengeMethod: types.CodeChallengeMethodPlain,
 		}
-		err := fS256Only.ValidateAuthorizationRequest(r)
+		err := fS256Only.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "plain")
 	})
@@ -144,7 +145,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateAuthorizationRequest(t *testing.T) 
 		r := &requests.AuthorizationRequest{
 			CodeChallenge: testVerifier,
 		}
-		err := fS256Only.ValidateAuthorizationRequest(r)
+		err := fS256Only.ValidateAuthorizationRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "plain")
 	})
@@ -157,7 +158,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 		r := &requests.TokenRequest{
 			Client: &sql.Client{TokenEndpointAuthMethod: string(types.ClientNoneAuthentication)},
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_verifier")
 	})
@@ -166,7 +167,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 		r := &requests.TokenRequest{
 			ClientAuthMethod: types.ClientBasicAuthentication,
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "authorization code")
 	})
@@ -176,7 +177,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			ClientAuthMethod: types.ClientBasicAuthentication,
 			AuthCode:         &sql.AuthorizationCode{},
 		}
-		assert.NoError(t, f.ValidateTokenRequest(r))
+		assert.NoError(t, f.ValidateTokenRequest(context.Background(), r))
 	})
 
 	t.Run("challenge_present_no_verifier", func(t *testing.T) {
@@ -184,7 +185,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			ClientAuthMethod: types.ClientBasicAuthentication,
 			AuthCode:         &sql.AuthorizationCode{CodeChallenge: testChallenge},
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_verifier")
 	})
@@ -195,7 +196,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			AuthCode:         &sql.AuthorizationCode{CodeChallenge: testChallenge},
 			CodeVerifier:     strings.Repeat("@", 43),
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code_verifier")
 	})
@@ -209,7 +210,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			},
 			CodeVerifier: testVerifier,
 		}
-		assert.NoError(t, f.ValidateTokenRequest(r))
+		assert.NoError(t, f.ValidateTokenRequest(context.Background(), r))
 	})
 
 	t.Run("s256_invalid", func(t *testing.T) {
@@ -221,7 +222,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			},
 			CodeVerifier: strings.Repeat("a", 43),
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code verifier")
 	})
@@ -235,7 +236,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			},
 			CodeVerifier: testVerifier,
 		}
-		assert.NoError(t, f.ValidateTokenRequest(r))
+		assert.NoError(t, f.ValidateTokenRequest(context.Background(), r))
 	})
 
 	t.Run("plain_invalid", func(t *testing.T) {
@@ -247,7 +248,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			},
 			CodeVerifier: strings.Repeat("b", 43),
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "code verifier")
 	})
@@ -259,7 +260,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			AuthCode:         &sql.AuthorizationCode{},
 			CodeVerifier:     testVerifier,
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "authorization code was not issued with a \"code_challenge\"")
 	})
@@ -275,7 +276,7 @@ func TestProofKeyForCodeExchangeFlow_ValidateTokenRequest(t *testing.T) {
 			},
 			CodeVerifier: testVerifier,
 		}
-		err := f.ValidateTokenRequest(r)
+		err := f.ValidateTokenRequest(context.Background(), r)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "\"code_challenge_method\" is missing")
 	})
@@ -289,7 +290,7 @@ func TestProofKeyForCodeExchangeFlow_ProcessAuthorizationCode(t *testing.T) {
 			CodeChallenge:       testChallenge,
 			CodeChallengeMethod: types.CodeChallengeMethodS256,
 		}
-		err := f.ProcessAuthorizationCode(r, nil, nil)
+		err := f.ProcessAuthorizationCode(context.Background(), r, nil, nil)
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "authorization code")
 	})
@@ -300,7 +301,7 @@ func TestProofKeyForCodeExchangeFlow_ProcessAuthorizationCode(t *testing.T) {
 			CodeChallengeMethod: types.CodeChallengeMethodS256,
 		}
 		authCode := &sql.AuthorizationCode{}
-		err := f.ProcessAuthorizationCode(r, authCode, nil)
+		err := f.ProcessAuthorizationCode(context.Background(), r, authCode, nil)
 		require.NoError(t, err)
 		assert.Equal(t, testChallenge, authCode.GetCodeChallenge())
 		assert.Equal(t, types.CodeChallengeMethodS256, authCode.GetCodeChallengeMethod())
@@ -314,7 +315,7 @@ func TestProofKeyForCodeExchangeFlow_ProcessAuthorizationCode(t *testing.T) {
 			// CodeChallengeMethod intentionally empty
 		}
 		authCode := &sql.AuthorizationCode{}
-		err := f.ProcessAuthorizationCode(r, authCode, nil)
+		err := f.ProcessAuthorizationCode(context.Background(), r, authCode, nil)
 		require.NoError(t, err)
 		assert.Equal(t, types.CodeChallengeMethodPlain, authCode.GetCodeChallengeMethod())
 	})

@@ -3,8 +3,8 @@ package clientauth
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	rfc6749 "github.com/alkeyio/authkit/mocks/rfc6749/client_authentication"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBaseHandler(t *testing.T) {

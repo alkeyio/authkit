@@ -3,9 +3,9 @@ package rfc7662
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	mock "github.com/alkeyio/authkit/mocks/rfc7662"
 	"github.com/alkeyio/authkit/types"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestConfig(t *testing.T) {

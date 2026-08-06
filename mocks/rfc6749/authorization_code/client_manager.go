@@ -26,9 +26,9 @@ func (_m *MockClientManager) EXPECT() *MockClientManager_Expecter {
 	return &MockClientManager_Expecter{mock: &_m.Mock}
 }
 
-// Authenticate provides a mock function with given fields: r, authMethods, endpointName
-func (_m *MockClientManager) Authenticate(r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string) (models.Client, error) {
-	ret := _m.Called(r, authMethods, endpointName)
+// Authenticate provides a mock function with given fields: ctx, r, authMethods, endpointName
+func (_m *MockClientManager) Authenticate(ctx context.Context, r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string) (models.Client, error) {
+	ret := _m.Called(ctx, r, authMethods, endpointName)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Authenticate")
@@ -36,19 +36,19 @@ func (_m *MockClientManager) Authenticate(r *http.Request, authMethods map[types
 
 	var r0 models.Client
 	var r1 error
-	if rf, ok := ret.Get(0).(func(*http.Request, map[types.ClientAuthMethod]bool, string) (models.Client, error)); ok {
-		return rf(r, authMethods, endpointName)
+	if rf, ok := ret.Get(0).(func(context.Context, *http.Request, map[types.ClientAuthMethod]bool, string) (models.Client, error)); ok {
+		return rf(ctx, r, authMethods, endpointName)
 	}
-	if rf, ok := ret.Get(0).(func(*http.Request, map[types.ClientAuthMethod]bool, string) models.Client); ok {
-		r0 = rf(r, authMethods, endpointName)
+	if rf, ok := ret.Get(0).(func(context.Context, *http.Request, map[types.ClientAuthMethod]bool, string) models.Client); ok {
+		r0 = rf(ctx, r, authMethods, endpointName)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(models.Client)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(*http.Request, map[types.ClientAuthMethod]bool, string) error); ok {
-		r1 = rf(r, authMethods, endpointName)
+	if rf, ok := ret.Get(1).(func(context.Context, *http.Request, map[types.ClientAuthMethod]bool, string) error); ok {
+		r1 = rf(ctx, r, authMethods, endpointName)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -62,16 +62,17 @@ type MockClientManager_Authenticate_Call struct {
 }
 
 // Authenticate is a helper method to define mock.On call
+//   - ctx context.Context
 //   - r *http.Request
 //   - authMethods map[types.ClientAuthMethod]bool
 //   - endpointName string
-func (_e *MockClientManager_Expecter) Authenticate(r interface{}, authMethods interface{}, endpointName interface{}) *MockClientManager_Authenticate_Call {
-	return &MockClientManager_Authenticate_Call{Call: _e.mock.On("Authenticate", r, authMethods, endpointName)}
+func (_e *MockClientManager_Expecter) Authenticate(ctx interface{}, r interface{}, authMethods interface{}, endpointName interface{}) *MockClientManager_Authenticate_Call {
+	return &MockClientManager_Authenticate_Call{Call: _e.mock.On("Authenticate", ctx, r, authMethods, endpointName)}
 }
 
-func (_c *MockClientManager_Authenticate_Call) Run(run func(r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string)) *MockClientManager_Authenticate_Call {
+func (_c *MockClientManager_Authenticate_Call) Run(run func(ctx context.Context, r *http.Request, authMethods map[types.ClientAuthMethod]bool, endpointName string)) *MockClientManager_Authenticate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(*http.Request), args[1].(map[types.ClientAuthMethod]bool), args[2].(string))
+		run(args[0].(context.Context), args[1].(*http.Request), args[2].(map[types.ClientAuthMethod]bool), args[3].(string))
 	})
 	return _c
 }
@@ -81,7 +82,7 @@ func (_c *MockClientManager_Authenticate_Call) Return(_a0 models.Client, _a1 err
 	return _c
 }
 
-func (_c *MockClientManager_Authenticate_Call) RunAndReturn(run func(*http.Request, map[types.ClientAuthMethod]bool, string) (models.Client, error)) *MockClientManager_Authenticate_Call {
+func (_c *MockClientManager_Authenticate_Call) RunAndReturn(run func(context.Context, *http.Request, map[types.ClientAuthMethod]bool, string) (models.Client, error)) *MockClientManager_Authenticate_Call {
 	_c.Call.Return(run)
 	return _c
 }
