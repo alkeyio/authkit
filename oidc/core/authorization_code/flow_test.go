@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/integrations/sql"
 	oidc "github.com/alkeyio/authkit/mocks/oidc/core/authorization_code"
 	"github.com/alkeyio/authkit/requests"
 	"github.com/alkeyio/authkit/types"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -251,42 +251,42 @@ func TestFlow_ProcessToken(t *testing.T) {
 		r := tokenReq()
 		r.Scopes = types.NewScopes([]string{"profile"})
 		data := map[string]interface{}{}
-		require.NoError(t, f.ProcessToken(r, nil, data))
+		require.NoError(t, f.ProcessToken(r.Request.Context(), r, nil, data))
 		assert.NotContains(t, data, "id_token")
 	})
 
 	t.Run("nil_auth_code_returns_error", func(t *testing.T) {
 		r := tokenReq()
 		r.AuthCode = nil
-		err := f.ProcessToken(r, nil, map[string]interface{}{})
+		err := f.ProcessToken(r.Request.Context(), r, nil, map[string]interface{}{})
 		assert.ErrorIs(t, err, ErrNilAuthorizationCode)
 	})
 
 	t.Run("nil_user_returns_error", func(t *testing.T) {
 		r := tokenReq()
 		r.User = nil
-		err := f.ProcessToken(r, nil, map[string]interface{}{})
+		err := f.ProcessToken(r.Request.Context(), r, nil, map[string]interface{}{})
 		assert.ErrorIs(t, err, ErrMissingUserID)
 	})
 
 	t.Run("empty_user_id_returns_error", func(t *testing.T) {
 		r := tokenReq()
 		r.User = &sql.User{UserID: ""}
-		err := f.ProcessToken(r, nil, map[string]interface{}{})
+		err := f.ProcessToken(r.Request.Context(), r, nil, map[string]interface{}{})
 		assert.ErrorIs(t, err, ErrMissingUserID)
 	})
 
 	t.Run("id_token_added_to_data", func(t *testing.T) {
 		r := tokenReq()
 		data := map[string]interface{}{}
-		require.NoError(t, f.ProcessToken(r, nil, data))
+		require.NoError(t, f.ProcessToken(r.Request.Context(), r, nil, data))
 		assert.Contains(t, data, "id_token")
 	})
 
 	t.Run("id_token_contains_required_claims", func(t *testing.T) {
 		r := tokenReq()
 		data := map[string]interface{}{}
-		require.NoError(t, f.ProcessToken(r, nil, data))
+		require.NoError(t, f.ProcessToken(r.Request.Context(), r, nil, data))
 
 		claims := parseIDToken(t, data["id_token"].(string))
 		assert.Equal(t, testIssuer, claims["iss"])
@@ -301,7 +301,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 		r := tokenReq()
 		r.AuthCode = &sql.AuthorizationCode{Nonce: "my-nonce"}
 		data := map[string]interface{}{}
-		require.NoError(t, f.ProcessToken(r, nil, data))
+		require.NoError(t, f.ProcessToken(r.Request.Context(), r, nil, data))
 
 		claims := parseIDToken(t, data["id_token"].(string))
 		assert.Equal(t, "my-nonce", claims["nonce"])
@@ -311,7 +311,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 		r := tokenReq()
 		r.AuthCode = &sql.AuthorizationCode{}
 		data := map[string]interface{}{}
-		require.NoError(t, f.ProcessToken(r, nil, data))
+		require.NoError(t, f.ProcessToken(r.Request.Context(), r, nil, data))
 
 		claims := parseIDToken(t, data["id_token"].(string))
 		assert.NotContains(t, claims, "nonce")
@@ -321,7 +321,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 		r := tokenReq()
 		before := time.Now().UTC().Round(time.Second)
 		data := map[string]interface{}{}
-		require.NoError(t, f.ProcessToken(r, nil, data))
+		require.NoError(t, f.ProcessToken(r.Request.Context(), r, nil, data))
 
 		claims := parseIDToken(t, data["id_token"].(string))
 		authTime := time.Unix(int64(claims["auth_time"].(float64)), 0).UTC()
@@ -336,7 +336,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 		f2 := New(validConfig().SetExtraClaimGenerator(gen.Execute))
 		r := tokenReq()
 		data := map[string]interface{}{}
-		require.NoError(t, f2.ProcessToken(r, nil, data))
+		require.NoError(t, f2.ProcessToken(r.Request.Context(), r, nil, data))
 
 		claims := parseIDToken(t, data["id_token"].(string))
 		assert.Equal(t, "value", claims["custom"])
@@ -355,7 +355,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 		r := tokenReq()
 		r.AuthCode = &sql.AuthorizationCode{Nonce: "real-nonce"}
 		data := map[string]interface{}{}
-		require.NoError(t, f2.ProcessToken(r, nil, data))
+		require.NoError(t, f2.ProcessToken(r.Request.Context(), r, nil, data))
 
 		claims := parseIDToken(t, data["id_token"].(string))
 		assert.Equal(t, testIssuer, claims["iss"])
@@ -370,7 +370,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 
 		f2 := New(validConfig().SetExtraClaimGenerator(gen.Execute))
 		r := tokenReq()
-		err := f2.ProcessToken(r, nil, map[string]interface{}{})
+		err := f2.ProcessToken(r.Request.Context(), r, nil, map[string]interface{}{})
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "generator error")
 	})
@@ -384,7 +384,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 		f2 := New(NewConfig().SetIssuer(testIssuer).SetSigningKeyGenerator(gen.Execute))
 		r := tokenReq()
 		data := map[string]interface{}{}
-		require.NoError(t, f2.ProcessToken(r, nil, data))
+		require.NoError(t, f2.ProcessToken(r.Request.Context(), r, nil, data))
 		assert.Contains(t, data, "id_token")
 	})
 
@@ -395,7 +395,7 @@ func TestFlow_ProcessToken(t *testing.T) {
 
 		f2 := New(NewConfig().SetIssuer(testIssuer).SetSigningKeyGenerator(gen.Execute))
 		r := tokenReq()
-		err := f2.ProcessToken(r, nil, map[string]interface{}{})
+		err := f2.ProcessToken(r.Request.Context(), r, nil, map[string]interface{}{})
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "key error")
 	})

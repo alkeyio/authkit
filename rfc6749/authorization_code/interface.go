@@ -93,5 +93,5 @@ type TokenRequestValidator interface {
 // before the response is written. Use it to add extra fields to the token
 // response (e.g. OIDC attaches id_token here).
 type TokenProcessor interface {
-	ProcessToken(r *requests.TokenRequest, token models.Token, data map[string]interface{}) error
+	ProcessToken(ctx context.Context, r *requests.TokenRequest, token models.Token, data map[string]interface{}) error
 }

@@ -5,8 +5,8 @@ package rfc7662
 import (
 	http "net/http"
 
-	mock "github.com/stretchr/testify/mock"
 	models "github.com/alkeyio/authkit/models"
+	mock "github.com/stretchr/testify/mock"
 
 	types "github.com/alkeyio/authkit/types"
 )

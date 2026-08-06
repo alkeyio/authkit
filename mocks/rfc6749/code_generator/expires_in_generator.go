@@ -3,8 +3,8 @@
 package codegen
 
 import (
-	mock "github.com/stretchr/testify/mock"
 	models "github.com/alkeyio/authkit/models"
+	mock "github.com/stretchr/testify/mock"
 
 	time "time"
 

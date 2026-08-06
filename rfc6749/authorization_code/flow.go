@@ -187,7 +187,7 @@ func (f *Flow) TokenResponse(r *requests.TokenRequest, rw http.ResponseWriter) e
 
 	data := f.StandardTokenData(token)
 	for _, h := range f.tokenProcessors {
-		if err = h.ProcessToken(r, token, data); err != nil {
+		if err = h.ProcessToken(r.Request.Context(), r, token, data); err != nil {
 			return err
 		}
 	}

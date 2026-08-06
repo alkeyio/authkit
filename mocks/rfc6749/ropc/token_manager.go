@@ -5,8 +5,8 @@ package ropc
 import (
 	context "context"
 
-	mock "github.com/stretchr/testify/mock"
 	models "github.com/alkeyio/authkit/models"
+	mock "github.com/stretchr/testify/mock"
 
 	requests "github.com/alkeyio/authkit/requests"
 )

@@ -5,12 +5,12 @@ import (
 	"errors"
 	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	autherrors "github.com/alkeyio/authkit/errors"
 	"github.com/alkeyio/authkit/models"
 	"github.com/alkeyio/authkit/requests"
 	"github.com/alkeyio/authkit/types"
 	"github.com/alkeyio/authkit/utils"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 var (
@@ -105,7 +105,7 @@ func (f *Flow) ProcessAuthorizationCode(r *requests.AuthorizationRequest, authCo
 
 // ProcessToken generates an ID Token and adds it to the token response data
 // under the "id_token" key. It is a no-op when the openid scope is absent.
-func (f *Flow) ProcessToken(r *requests.TokenRequest, _ models.Token, data map[string]interface{}) error {
+func (f *Flow) ProcessToken(_ context.Context, r *requests.TokenRequest, _ models.Token, data map[string]interface{}) error {
 	if isOIDCReq := r.Scopes.ContainOpenID(); !isOIDCReq {
 		return nil
 	}

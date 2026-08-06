@@ -5,8 +5,8 @@ package rfc9068
 import (
 	context "context"
 
-	mock "github.com/stretchr/testify/mock"
 	models "github.com/alkeyio/authkit/models"
+	mock "github.com/stretchr/testify/mock"
 
 	types "github.com/alkeyio/authkit/types"
 )
