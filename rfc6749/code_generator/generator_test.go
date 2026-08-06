@@ -1,6 +1,7 @@
 package codegen
 
 import (
+	"context"
 	"errors"
 	"testing"
 	"time"
@@ -45,7 +46,7 @@ func TestGenerator_Generate(t *testing.T) {
 		extraDataGen.EXPECT().Execute(mock.AnythingOfType("*requests.AuthorizationRequest")).Return(extraData, nil).Once()
 
 		g := New(NewOptions().SetExtraDataGenerator(extraDataGen.Execute))
-		err := g.Generate(mockAuthCode, r)
+		err := g.Generate(context.Background(), mockAuthCode, r)
 		assert.NoError(t, err)
 		assert.Equal(t, DefaultCodeLength, len(mockAuthCode.GetCode()))
 		assert.Equal(t, r.Client.GetClientID(), mockAuthCode.GetClientID())
@@ -64,7 +65,7 @@ func TestGenerator_Generate(t *testing.T) {
 		mockAuthCode := &sql.AuthorizationCode{}
 
 		g := New(NewOptions())
-		err := g.Generate(mockAuthCode, r)
+		err := g.Generate(context.Background(), mockAuthCode, r)
 		assert.NoError(t, err)
 		assert.Equal(t, DefaultCodeLength, len(mockAuthCode.GetCode()))
 		assert.Nil(t, mockAuthCode.GetExtraData())
@@ -74,7 +75,7 @@ func TestGenerator_Generate(t *testing.T) {
 		r := newReq()
 		r.Client = nil
 
-		err := New(NewOptions()).Generate(&sql.AuthorizationCode{}, r)
+		err := New(NewOptions()).Generate(context.Background(), &sql.AuthorizationCode{}, r)
 		assert.ErrorIs(t, err, ErrNilClient)
 	})
 
@@ -82,7 +83,7 @@ func TestGenerator_Generate(t *testing.T) {
 		r := newReq()
 		r.User = nil
 
-		err := New(NewOptions()).Generate(&sql.AuthorizationCode{}, r)
+		err := New(NewOptions()).Generate(context.Background(), &sql.AuthorizationCode{}, r)
 		assert.ErrorIs(t, err, ErrNilUser)
 	})
 
@@ -92,7 +93,7 @@ func TestGenerator_Generate(t *testing.T) {
 		extraDataGen.EXPECT().Execute(mock.AnythingOfType("*requests.AuthorizationRequest")).Return(nil, errors.New("store error")).Once()
 
 		g := New(NewOptions().SetExtraDataGenerator(extraDataGen.Execute))
-		err := g.Generate(&sql.AuthorizationCode{}, r)
+		err := g.Generate(context.Background(), &sql.AuthorizationCode{}, r)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "store error")
 	})

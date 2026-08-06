@@ -1,6 +1,7 @@
 package codegen
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -40,7 +41,7 @@ func New(opts ...*Options) *Generator {
 // auth_time, and expires_in. If an ExtraDataGenerator is configured and
 // authCode implements models.ExtendableAuthorizationCode, its output is stored
 // via SetExtraData.
-func (g *Generator) Generate(authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error {
+func (g *Generator) Generate(_ context.Context, authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error {
 	client := r.Client
 	if utils.IsNil(client) {
 		return ErrNilClient

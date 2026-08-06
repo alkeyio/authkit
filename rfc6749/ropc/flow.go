@@ -218,7 +218,7 @@ func (f *Flow) genToken(r *requests.TokenRequest) (models.Token, error) {
 	}
 
 	// Include a refresh token only if the client has the refresh_token grant enabled.
-	if err := f.tokenMgr.Generate(token, r, r.Client.CheckGrantType(types.GrantTypeRefreshToken)); err != nil {
+	if err := f.tokenMgr.Generate(r.Request.Context(), token, r, r.Client.CheckGrantType(types.GrantTypeRefreshToken)); err != nil {
 		return nil, err
 	}
 

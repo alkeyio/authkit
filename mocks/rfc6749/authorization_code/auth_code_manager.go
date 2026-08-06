@@ -71,17 +71,17 @@ func (_c *MockAuthCodeManager_DeleteByCode_Call) RunAndReturn(run func(context.C
 	return _c
 }
 
-// Generate provides a mock function with given fields: authCode, r
-func (_m *MockAuthCodeManager) Generate(authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error {
-	ret := _m.Called(authCode, r)
+// Generate provides a mock function with given fields: ctx, authCode, r
+func (_m *MockAuthCodeManager) Generate(ctx context.Context, authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error {
+	ret := _m.Called(ctx, authCode, r)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Generate")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.AuthorizationCode, *requests.AuthorizationRequest) error); ok {
-		r0 = rf(authCode, r)
+	if rf, ok := ret.Get(0).(func(context.Context, models.AuthorizationCode, *requests.AuthorizationRequest) error); ok {
+		r0 = rf(ctx, authCode, r)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -95,15 +95,16 @@ type MockAuthCodeManager_Generate_Call struct {
 }
 
 // Generate is a helper method to define mock.On call
+//   - ctx context.Context
 //   - authCode models.AuthorizationCode
 //   - r *requests.AuthorizationRequest
-func (_e *MockAuthCodeManager_Expecter) Generate(authCode interface{}, r interface{}) *MockAuthCodeManager_Generate_Call {
-	return &MockAuthCodeManager_Generate_Call{Call: _e.mock.On("Generate", authCode, r)}
+func (_e *MockAuthCodeManager_Expecter) Generate(ctx interface{}, authCode interface{}, r interface{}) *MockAuthCodeManager_Generate_Call {
+	return &MockAuthCodeManager_Generate_Call{Call: _e.mock.On("Generate", ctx, authCode, r)}
 }
 
-func (_c *MockAuthCodeManager_Generate_Call) Run(run func(authCode models.AuthorizationCode, r *requests.AuthorizationRequest)) *MockAuthCodeManager_Generate_Call {
+func (_c *MockAuthCodeManager_Generate_Call) Run(run func(ctx context.Context, authCode models.AuthorizationCode, r *requests.AuthorizationRequest)) *MockAuthCodeManager_Generate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(models.AuthorizationCode), args[1].(*requests.AuthorizationRequest))
+		run(args[0].(context.Context), args[1].(models.AuthorizationCode), args[2].(*requests.AuthorizationRequest))
 	})
 	return _c
 }
@@ -113,7 +114,7 @@ func (_c *MockAuthCodeManager_Generate_Call) Return(_a0 error) *MockAuthCodeMana
 	return _c
 }
 
-func (_c *MockAuthCodeManager_Generate_Call) RunAndReturn(run func(models.AuthorizationCode, *requests.AuthorizationRequest) error) *MockAuthCodeManager_Generate_Call {
+func (_c *MockAuthCodeManager_Generate_Call) RunAndReturn(run func(context.Context, models.AuthorizationCode, *requests.AuthorizationRequest) error) *MockAuthCodeManager_Generate_Call {
 	_c.Call.Return(run)
 	return _c
 }

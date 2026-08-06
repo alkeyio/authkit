@@ -327,7 +327,7 @@ func (f *Flow) genAuthCode(r *requests.AuthorizationRequest) (models.Authorizati
 		return nil, ErrNilAuthCode
 	}
 
-	if err := f.authCodeMgr.Generate(authCode, r); err != nil {
+	if err := f.authCodeMgr.Generate(r.Request.Context(), authCode, r); err != nil {
 		return nil, err
 	}
 
@@ -428,7 +428,7 @@ func (f *Flow) genToken(r *requests.TokenRequest) (models.Token, error) {
 	}
 
 	r.Scopes = r.AuthCode.GetScopes()
-	if err := f.tokenMgr.Generate(token, r, r.Client.CheckGrantType(types.GrantTypeRefreshToken)); err != nil {
+	if err := f.tokenMgr.Generate(r.Request.Context(), token, r, r.Client.CheckGrantType(types.GrantTypeRefreshToken)); err != nil {
 		return nil, err
 	}
 

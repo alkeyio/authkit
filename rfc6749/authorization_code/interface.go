@@ -40,7 +40,7 @@ type AuthCodeManager interface {
 
 	// Generate populates authCode with a random code value, expiry, and any
 	// request-derived data (client_id, redirect_uri, scopes, user_id).
-	Generate(authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error
+	Generate(ctx context.Context, authCode models.AuthorizationCode, r *requests.AuthorizationRequest) error
 
 	// Save persists authCode to the backing store.
 	Save(ctx context.Context, code models.AuthorizationCode) error
@@ -57,7 +57,7 @@ type TokenManager interface {
 
 	// Generate populates token with a value, expiry, scopes, and client/user
 	// binding. Set includeRefreshToken to true to also generate a refresh token.
-	Generate(token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error
+	Generate(ctx context.Context, token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error
 
 	// Save persists the token to the backing store.
 	Save(ctx context.Context, token models.Token) error

@@ -239,7 +239,7 @@ func TestFlow_genToken(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
 		// RFC 6749 §4.4.3: refresh token SHOULD NOT be included — always false.
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 
 		r := &requests.TokenRequest{
 			Client:  confidentialClient(),
@@ -267,7 +267,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("error_when_generate_fails", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(errors.New("generate error")).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(errors.New("generate error")).Once()
 
 		r := &requests.TokenRequest{
 			Client:  confidentialClient(),
@@ -293,7 +293,7 @@ func TestFlow_TokenResponse(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
 		err := f.TokenResponse(r, httptest.NewRecorder())
@@ -312,7 +312,7 @@ func TestFlow_TokenResponse(t *testing.T) {
 	t.Run("error_when_save_fails", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(errors.New("db error")).Once()
 
 		err := f.TokenResponse(r, httptest.NewRecorder())
@@ -335,7 +335,7 @@ func TestFlow_TokenResponse_WithProcessor(t *testing.T) {
 	t.Run("success_processor_called", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
@@ -348,7 +348,7 @@ func TestFlow_TokenResponse_WithProcessor(t *testing.T) {
 	t.Run("error_when_processor_fails", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything).Return(errors.New("processor error")).Once()
 
 		err := f.TokenResponse(r, httptest.NewRecorder())

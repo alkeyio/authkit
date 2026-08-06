@@ -477,7 +477,7 @@ func TestFlow_genAuthCode(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		code := &sql.AuthorizationCode{}
 		mockAuthCodeMgr.On("New").Return(code).Once()
-		mockAuthCodeMgr.On("Generate", mock.AnythingOfType("*sql.AuthorizationCode"), mock.Anything).Return(nil).Once()
+		mockAuthCodeMgr.On("Generate", mock.Anything, mock.AnythingOfType("*sql.AuthorizationCode"), mock.Anything).Return(nil).Once()
 
 		r := newAuthReq(http.MethodGet)
 		got, err := f.genAuthCode(r)
@@ -497,7 +497,7 @@ func TestFlow_genAuthCode(t *testing.T) {
 	t.Run("error_when_generate_fails", func(t *testing.T) {
 		code := &sql.AuthorizationCode{}
 		mockAuthCodeMgr.On("New").Return(code).Once()
-		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything).Return(errors.New("generate error")).Once()
+		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything).Return(errors.New("generate error")).Once()
 
 		r := newAuthReq(http.MethodGet)
 		got, err := f.genAuthCode(r)
@@ -526,7 +526,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("success_with_refresh_token", func(t *testing.T) {
 		token := &sql.Token{}
 		mockTokenMgr.On("New").Return(token).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, true).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, true).Return(nil).Once()
 
 		r := newTokenReq()
 		r.Client = clientWithRefresh
@@ -539,7 +539,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("success_without_refresh_token", func(t *testing.T) {
 		token := &sql.Token{}
 		mockTokenMgr.On("New").Return(token).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 
 		r := newTokenReq()
 		r.Client = clientWithoutRefresh
@@ -563,7 +563,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("error_when_generate_fails", func(t *testing.T) {
 		token := &sql.Token{}
 		mockTokenMgr.On("New").Return(token).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(errors.New("generate error")).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(errors.New("generate error")).Once()
 
 		r := newTokenReq()
 		r.Client = clientWithRefresh
@@ -626,7 +626,7 @@ func TestFlow_AuthorizationResponse(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		code := &sql.AuthorizationCode{Code: "generated-code"}
 		mockAuthCodeMgr.On("New").Return(code).Once()
-		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything).Return(nil).Once()
+		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 		mockAuthCodeMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
 		r := newAuthReq(http.MethodGet)
@@ -648,7 +648,7 @@ func TestFlow_AuthorizationResponse(t *testing.T) {
 	t.Run("success_without_state", func(t *testing.T) {
 		code := &sql.AuthorizationCode{Code: "generated-code"}
 		mockAuthCodeMgr.On("New").Return(code).Once()
-		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything).Return(nil).Once()
+		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 		mockAuthCodeMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
 		r := newAuthReq(http.MethodGet)
@@ -678,7 +678,7 @@ func TestFlow_AuthorizationResponse(t *testing.T) {
 	t.Run("error_when_save_fails", func(t *testing.T) {
 		code := &sql.AuthorizationCode{Code: "generated-code"}
 		mockAuthCodeMgr.On("New").Return(code).Once()
-		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything).Return(nil).Once()
+		mockAuthCodeMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 		mockAuthCodeMgr.On("Save", mock.Anything, mock.Anything).Return(errors.New("save error")).Once()
 
 		r := newAuthReq(http.MethodGet)
@@ -708,7 +708,7 @@ func TestFlow_TokenResponse(t *testing.T) {
 
 		mockUserMgr.On("QueryUserByCode", mock.Anything, mock.Anything, mock.Anything).Return(user, nil).Once()
 		mockTokenMgr.On("New").Return(token).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
 		mockAuthCodeMgr.On("DeleteByCode", mock.Anything, "auth-code-123").Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
@@ -731,7 +731,7 @@ func TestFlow_TokenResponse(t *testing.T) {
 
 		mockUserMgr.On("QueryUserByCode", mock.Anything, mock.Anything, mock.Anything).Return(user, nil).Once()
 		mockTokenMgr.On("New").Return(token).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
 		// Delete fails → Save must NOT be called
 		mockAuthCodeMgr.On("DeleteByCode", mock.Anything, "code-abc").Return(errors.New("db error")).Once()
 

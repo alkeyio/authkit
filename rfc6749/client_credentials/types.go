@@ -25,7 +25,7 @@ type TokenManager interface {
 	// Generate populates token with a value, expiry, scopes, and client binding.
 	// includeRefreshToken is always false for this grant — RFC 6749 §4.4.3
 	// states that a refresh token SHOULD NOT be issued in the client credentials flow.
-	Generate(token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error
+	Generate(ctx context.Context, token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error
 
 	// Save persists the token to the backing store.
 	Save(ctx context.Context, token models.Token) error

@@ -24,17 +24,17 @@ func (_m *MockTokenManager) EXPECT() *MockTokenManager_Expecter {
 	return &MockTokenManager_Expecter{mock: &_m.Mock}
 }
 
-// Generate provides a mock function with given fields: token, r, includeRefreshToken
-func (_m *MockTokenManager) Generate(token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error {
-	ret := _m.Called(token, r, includeRefreshToken)
+// Generate provides a mock function with given fields: ctx, token, r, includeRefreshToken
+func (_m *MockTokenManager) Generate(ctx context.Context, token models.Token, r *requests.TokenRequest, includeRefreshToken bool) error {
+	ret := _m.Called(ctx, token, r, includeRefreshToken)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Generate")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(models.Token, *requests.TokenRequest, bool) error); ok {
-		r0 = rf(token, r, includeRefreshToken)
+	if rf, ok := ret.Get(0).(func(context.Context, models.Token, *requests.TokenRequest, bool) error); ok {
+		r0 = rf(ctx, token, r, includeRefreshToken)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -48,16 +48,17 @@ type MockTokenManager_Generate_Call struct {
 }
 
 // Generate is a helper method to define mock.On call
+//   - ctx context.Context
 //   - token models.Token
 //   - r *requests.TokenRequest
 //   - includeRefreshToken bool
-func (_e *MockTokenManager_Expecter) Generate(token interface{}, r interface{}, includeRefreshToken interface{}) *MockTokenManager_Generate_Call {
-	return &MockTokenManager_Generate_Call{Call: _e.mock.On("Generate", token, r, includeRefreshToken)}
+func (_e *MockTokenManager_Expecter) Generate(ctx interface{}, token interface{}, r interface{}, includeRefreshToken interface{}) *MockTokenManager_Generate_Call {
+	return &MockTokenManager_Generate_Call{Call: _e.mock.On("Generate", ctx, token, r, includeRefreshToken)}
 }
 
-func (_c *MockTokenManager_Generate_Call) Run(run func(token models.Token, r *requests.TokenRequest, includeRefreshToken bool)) *MockTokenManager_Generate_Call {
+func (_c *MockTokenManager_Generate_Call) Run(run func(ctx context.Context, token models.Token, r *requests.TokenRequest, includeRefreshToken bool)) *MockTokenManager_Generate_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(models.Token), args[1].(*requests.TokenRequest), args[2].(bool))
+		run(args[0].(context.Context), args[1].(models.Token), args[2].(*requests.TokenRequest), args[3].(bool))
 	})
 	return _c
 }
@@ -67,7 +68,7 @@ func (_c *MockTokenManager_Generate_Call) Return(_a0 error) *MockTokenManager_Ge
 	return _c
 }
 
-func (_c *MockTokenManager_Generate_Call) RunAndReturn(run func(models.Token, *requests.TokenRequest, bool) error) *MockTokenManager_Generate_Call {
+func (_c *MockTokenManager_Generate_Call) RunAndReturn(run func(context.Context, models.Token, *requests.TokenRequest, bool) error) *MockTokenManager_Generate_Call {
 	_c.Call.Return(run)
 	return _c
 }

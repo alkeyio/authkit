@@ -189,7 +189,7 @@ func (f *Flow) genToken(r *requests.TokenRequest) (models.Token, error) {
 		return nil, ErrNilToken
 	}
 
-	if err := f.tokenMgr.Generate(token, r, false); err != nil {
+	if err := f.tokenMgr.Generate(r.Request.Context(), token, r, false); err != nil {
 		return nil, err
 	}
 

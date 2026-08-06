@@ -76,7 +76,7 @@ func TestFlow_TokenResponse(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
 		err := f.TokenResponse(newReq(), httptest.NewRecorder())
@@ -93,7 +93,7 @@ func TestFlow_TokenResponse(t *testing.T) {
 	t.Run("error_when_save_fails", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(errors.New("db error")).Once()
 
 		err := f.TokenResponse(newReq(), httptest.NewRecorder())
@@ -115,7 +115,7 @@ func TestFlow_TokenResponse_WithProcessor(t *testing.T) {
 	t.Run("success_processor_called", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
 		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything).Return(nil).Once()
 		mockTokenMgr.On("Save", mock.Anything, mock.Anything).Return(nil).Once()
 
@@ -126,7 +126,7 @@ func TestFlow_TokenResponse_WithProcessor(t *testing.T) {
 	t.Run("error_when_processor_fails", func(t *testing.T) {
 		mockToken := &sql.Token{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(nil).Once()
 		mockProcessor.On("ProcessToken", mock.Anything, mock.Anything, mock.Anything).Return(errors.New("processor error")).Once()
 
 		err := f.TokenResponse(r, httptest.NewRecorder())
@@ -564,7 +564,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("success_without_refresh_token", func(t *testing.T) {
 		mockClient := &sql.Client{GrantTypes: []string{types.GrantTypeROPC.String()}}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, false).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, false).Return(nil).Once()
 
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
@@ -580,7 +580,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("success_with_refresh_token", func(t *testing.T) {
 		mockClient := &sql.Client{GrantTypes: []string{types.GrantTypeROPC.String(), types.GrantTypeRefreshToken.String()}}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, true).Return(nil).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, true).Return(nil).Once()
 
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
@@ -611,7 +611,7 @@ func TestFlow_genToken(t *testing.T) {
 	t.Run("error_when_generate_fails", func(t *testing.T) {
 		mockClient := &sql.Client{}
 		mockTokenMgr.On("New").Return(mockToken).Once()
-		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(errors.New("unexpected")).Once()
+		mockTokenMgr.On("Generate", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("bool")).Return(errors.New("unexpected")).Once()
 
 		r := &requests.TokenRequest{
 			Request: httptest.NewRequest(http.MethodPost, "/", nil),
